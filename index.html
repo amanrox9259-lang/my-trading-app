@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -9,7 +9,26 @@
 </head>
 
 <body>
+<div id="authScreen">
+  <div class="auth-box">
+    <div class="auth-logo">TX</div>
 
+    <h1>Welcome to TradeX</h1>
+    <p>Login to continue</p>
+
+    <input id="authEmail" type="email" placeholder="Email address">
+
+    <input id="authPassword" type="password" placeholder="Password">
+
+    <button onclick="loginUser()">Login</button>
+
+    <button class="signup-btn" onclick="signupUser()">
+      Create Account
+    </button>
+
+    <small id="authMessage"></small>
+  </div>
+</div>
   <div id="app">
 
     <!-- HEADER -->
