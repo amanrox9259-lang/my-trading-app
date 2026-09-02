@@ -1,13 +1,292 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Trading App</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TradeX</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial,sans-serif;
+}
+
+body{
+  background:#f5f7fb;
+  color:#172033;
+  padding-bottom:80px;
+}
+
+.header{
+  background:#ffffff;
+  padding:18px 16px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid #e5e7eb;
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+
+.logo{
+  font-size:23px;
+  font-weight:800;
+}
+
+.logo span{
+  color:#2563eb;
+}
+
+.profile{
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  background:#2563eb;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+}
+
+.container{
+  padding:16px;
+  max-width:600px;
+  margin:auto;
+}
+
+.balance{
+  background:#111827;
+  color:white;
+  padding:22px;
+  border-radius:18px;
+  margin-bottom:16px;
+}
+
+.balance small{
+  color:#b9c0cc;
+}
+
+.balance h1{
+  font-size:30px;
+  margin:8px 0;
+}
+
+.actions{
+  display:flex;
+  gap:10px;
+}
+
+.action{
+  flex:1;
+  padding:12px;
+  border-radius:10px;
+  border:0;
+  font-weight:bold;
+  background:#2563eb;
+  color:white;
+}
+
+.action.withdraw{
+  background:#e5e7eb;
+  color:#111827;
+}
+
+.section-title{
+  margin:22px 0 12px;
+  font-size:19px;
+}
+
+.market{
+  background:white;
+  border-radius:15px;
+  padding:16px;
+  margin-bottom:10px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  box-shadow:0 2px 8px rgba(0,0,0,.04);
+}
+
+.market-name{
+  font-weight:bold;
+}
+
+.market-price{
+  text-align:right;
+}
+
+.up{
+  color:#16a34a;
+  font-size:13px;
+}
+
+.down{
+  color:#dc2626;
+  font-size:13px;
+}
+
+.chart{
+  height:180px;
+  background:white;
+  border-radius:16px;
+  margin-top:12px;
+  padding:15px;
+  position:relative;
+  overflow:hidden;
+}
+
+.chart-line{
+  position:absolute;
+  left:0;
+  right:0;
+  top:50%;
+  height:3px;
+  background:#2563eb;
+  transform:rotate(-7deg);
+  box-shadow:0 0 12px #2563eb;
+}
+
+.chart-text{
+  font-size:12px;
+  color:#6b7280;
+}
+
+.bottom{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:white;
+  border-top:1px solid #ddd;
+  display:flex;
+  justify-content:space-around;
+  padding:12px 4px;
+}
+
+.nav{
+  text-align:center;
+  font-size:12px;
+  color:#6b7280;
+}
+
+.nav.active{
+  color:#2563eb;
+  font-weight:bold;
+}
+
+.icon{
+  font-size:20px;
+  display:block;
+  margin-bottom:3px;
+}
+</style>
 </head>
 
 <body>
-  <h1>My Trading App 🚀</h1>
-  <p>Our trading platform is starting!</p>
+
+<header class="header">
+  <div class="logo">Trade<span>X</span></div>
+  <div class="profile">A</div>
+</header>
+
+<main class="container">
+
+  <div class="balance">
+    <small>Available Balance</small>
+    <h1>₹0.00</h1>
+
+    <div class="actions">
+      <button class="action" onclick="deposit()">＋ Add Money</button>
+      <button class="action withdraw" onclick="withdraw()">Withdraw</button>
+    </div>
+  </div>
+
+  <h2 class="section-title">Market Overview</h2>
+
+  <div class="market">
+    <div>
+      <div class="market-name">NIFTY 50</div>
+      <small>National Stock Exchange</small>
+    </div>
+    <div class="market-price">
+      <b>25,732.30</b>
+      <div class="up">▲ 0.42%</div>
+    </div>
+  </div>
+
+  <div class="market">
+    <div>
+      <div class="market-name">BANK NIFTY</div>
+      <small>Banking Index</small>
+    </div>
+    <div class="market-price">
+      <b>57,845.20</b>
+      <div class="down">▼ 0.18%</div>
+    </div>
+  </div>
+
+  <h2 class="section-title">NIFTY 50 Chart</h2>
+
+  <div class="chart">
+    <div class="chart-text">Live market chart</div>
+    <div class="chart-line"></div>
+  </div>
+
+  <h2 class="section-title">Watchlist</h2>
+
+  <div class="market">
+    <div class="market-name">RELIANCE</div>
+    <div class="market-price">
+      <b>₹1,428.50</b>
+      <div class="up">▲ 0.72%</div>
+    </div>
+  </div>
+
+  <div class="market">
+    <div class="market-name">TCS</div>
+    <div class="market-price">
+      <b>₹3,124.80</b>
+      <div class="down">▼ 0.31%</div>
+    </div>
+  </div>
+
+</main>
+
+<nav class="bottom">
+  <div class="nav active">
+    <span class="icon">⌂</span>
+    Home
+  </div>
+
+  <div class="nav">
+    <span class="icon">📊</span>
+    Markets
+  </div>
+
+  <div class="nav">
+    <span class="icon">💼</span>
+    Portfolio
+  </div>
+
+  <div class="nav">
+    <span class="icon">👤</span>
+    Profile
+  </div>
+</nav>
+
+<script>
+function deposit(){
+  alert("Deposit module will be connected through an authorised payment provider.");
+}
+
+function withdraw(){
+  alert("Withdrawal module will be connected through the authorised financial infrastructure.");
+}
+</script>
+
 </body>
-</html>
+        </html>
