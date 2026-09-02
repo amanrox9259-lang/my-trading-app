@@ -846,3 +846,130 @@ setInterval(function(){
 
 
 },3000);
+// ============================
+// AUTHENTICATION
+// ============================
+
+async function signupUser(){
+
+  const email =
+    document.getElementById("authEmail").value.trim();
+
+  const password =
+    document.getElementById("authPassword").value;
+
+  const message =
+    document.getElementById("authMessage");
+
+  if(!email || !password){
+    message.textContent =
+      "Email and password required.";
+    return;
+  }
+
+  if(password.length < 6){
+    message.textContent =
+      "Password must be at least 6 characters.";
+    return;
+  }
+
+  message.textContent = "Creating account...";
+
+  const { data, error } =
+    await supabaseClient.auth.signUp({
+      email: email,
+      password: password
+    });
+
+  if(error){
+    message.textContent = error.message;
+    return;
+  }
+
+  if(data.user && !data.session){
+    message.textContent =
+      "Account created. Check your email to verify.";
+    return;
+  }
+
+  message.textContent = "Account created!";
+  showApp();
+}
+
+
+async function loginUser(){
+
+  const email =
+    document.getElementById("authEmail").value.trim();
+
+  const password =
+    document.getElementById("authPassword").value;
+
+  const message =
+    document.getElementById("authMessage");
+
+  if(!email || !password){
+    message.textContent =
+      "Email and password required.";
+    return;
+  }
+
+  message.textContent = "Logging in...";
+
+  const { data, error } =
+    await supabaseClient.auth.signInWithPassword({
+      email: email,
+      password: password
+    });
+
+  if(error){
+    message.textContent = error.message;
+    return;
+  }
+
+  message.textContent = "Login successful!";
+  showApp();
+}
+
+
+function showApp(){
+
+  const authScreen =
+    document.getElementById("authScreen");
+
+  if(authScreen){
+    authScreen.style.display = "none";
+  }
+
+  document.getElementById("app")
+    .style.display = "block";
+
+  go("home");
+}
+
+
+function showLogin(){
+
+  const authScreen =
+    document.getElementById("authScreen");
+
+  if(authScreen){
+    authScreen.style.display = "flex";
+  }
+
+  document.getElementById("app")
+    .style.display = "none";
+}
+
+
+supabaseClient.auth.onAuthStateChange(
+  function(event, session){
+
+    if(session){
+      showApp();
+    }else{
+      showLogin();
+    }
+
+  }
+);
