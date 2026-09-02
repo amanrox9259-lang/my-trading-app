@@ -1,4 +1,7 @@
-let currentPage = "home";
+const supabaseClient = window.supabase.createClient(
+  "https://ialhcvbmauefotujspag.supabase.co/rest/v1/",
+  "sb_publishable_9ppoRoPfHeAPteYpR-GbVg_aDcTiWg9"
+);let currentPage = "home";
 let orderSide = "BUY";
 
 let balance = 100000;
