@@ -1,980 +1,389 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TradeX Real</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TradeX</title>
 
-<style>
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-  font-family:Arial,sans-serif;
-}
-
-body{
-  background:#07111f;
-  color:#fff;
-  padding-bottom:80px;
-}
-
-.header{
-  height:70px;
-  padding:18px 20px;
-  background:#0b1728;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  border-bottom:1px solid #203149;
-}
-
-.logo{
-  font-size:28px;
-  font-weight:bold;
-}
-
-.live{
-  color:#25d7a0;
-  font-size:16px;
-}
-
-.container{
-  padding:20px;
-  max-width:700px;
-  margin:auto;
-}
-
-.balance{
-  background:linear-gradient(135deg,#12304e,#0b1d32);
-  border-radius:25px;
-  padding:28px;
-  margin-bottom:20px;
-}
-
-.balance small{
-  color:#91a6bd;
-  font-size:16px;
-}
-
-.balance h1{
-  margin-top:15px;
-  font-size:40px;
-}
-
-.profit{
-  margin-top:12px;
-  color:#29d6a0;
-  font-size:19px;
-}
-
-.tabs{
-  display:flex;
-  gap:12px;
-  margin-bottom:25px;
-}
-
-.tab{
-  flex:1;
-  padding:18px 5px;
-  border:0;
-  border-radius:17px;
-  background:#102036;
-  color:#aebed1;
-  font-size:17px;
-}
-
-.tab.active{
-  background:#1877f2;
-  color:white;
-}
-
-.card{
-  background:#0d1b2d;
-  border-radius:25px;
-  padding:25px;
-  margin-bottom:20px;
-  border:1px solid #142b44;
-}
-
-.coin-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.coin-name{
-  font-size:24px;
-  font-weight:bold;
-}
-
-.coin-sub{
-  color:#899db3;
-  margin-top:5px;
-}
-
-.price{
-  text-align:right;
-  font-size:30px;
-}
-
-.change{
-  color:#25d7a0;
-  font-size:17px;
-  margin-top:5px;
-}
-
-.chart{
-  height:180px;
-  margin:25px 0;
-  border-bottom:1px solid #1c334c;
-  border-left:1px solid #1c334c;
-  position:relative;
-  overflow:hidden;
-  background:
-    linear-gradient(#10243a 1px,transparent 1px),
-    linear-gradient(90deg,#10243a 1px,transparent 1px);
-  background-size:25% 25%;
-}
-
-.line{
-  position:absolute;
-  left:0;
-  top:30px;
-  width:100%;
-  height:120px;
-}
-
-.line svg{
-  width:100%;
-  height:100%;
-}
-
-.highlow{
-  display:flex;
-  justify-content:space-between;
-  color:#91a6bd;
-  margin-bottom:25px;
-}
-
-.actions{
-  display:flex;
-  gap:15px;
-}
-
-.buy,.sell{
-  flex:1;
-  padding:18px;
-  border:0;
-  border-radius:18px;
-  color:white;
-  font-size:20px;
-  font-weight:bold;
-}
-
-.buy{
-  background:#0caf7d;
-}
-
-.sell{
-  background:#e94b68;
-}
-
-.buy:active,.sell:active,.tab:active{
-  transform:scale(.97);
-}
-
-.section-title{
-  font-size:25px;
-  margin:10px 0 20px;
-}
-
-.market-item,.order{
-  background:#0d1b2d;
-  padding:20px;
-  border-radius:18px;
-  margin-bottom:12px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.market-left{
-  display:flex;
-  flex-direction:column;
-  gap:5px;
-}
-
-.gray{
-  color:#8ea1b6;
-}
-
-.green{
-  color:#27d5a0;
-}
-
-.red{
-  color:#ef526b;
-}
-
-.empty{
-  text-align:center;
-  color:#8497ad;
-  padding:40px 10px;
-}
-
-.profile-box{
-  background:#0d1b2d;
-  border-radius:22px;
-  padding:25px;
-}
-
-.profile-row{
-  display:flex;
-  justify-content:space-between;
-  padding:18px 0;
-  border-bottom:1px solid #203149;
-}
-
-.reset{
-  width:100%;
-  margin-top:25px;
-  padding:15px;
-  border:0;
-  border-radius:14px;
-  background:#263a52;
-  color:white;
-  font-size:16px;
-}
-
-.bottom{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  height:75px;
-  background:#091729;
-  border-top:1px solid #203149;
-  display:flex;
-  justify-content:space-around;
-  align-items:center;
-  z-index:10;
-}
-
-.nav{
-  background:none;
-  border:0;
-  color:#8498ae;
-  font-size:13px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:5px;
-}
-
-.nav span{
-  font-size:23px;
-}
-
-.nav.active{
-  color:#3d96ff;
-}
-
-.modal{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.75);
-  z-index:20;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-}
-
-.modal-box{
-  background:#0d1b2d;
-  width:100%;
-  max-width:420px;
-  border-radius:22px;
-  padding:25px;
-}
-
-.modal-box h2{
-  margin-bottom:20px;
-}
-
-.modal-box input{
-  width:100%;
-  padding:16px;
-  border-radius:12px;
-  border:1px solid #30455d;
-  background:#07111f;
-  color:white;
-  font-size:18px;
-  margin:10px 0 20px;
-}
-
-.modal-actions{
-  display:flex;
-  gap:10px;
-}
-
-.modal-actions button{
-  flex:1;
-  padding:15px;
-  border:0;
-  border-radius:12px;
-  color:white;
-  font-size:16px;
-}
-
-.cancel{
-  background:#34475d;
-}
-
-.confirm{
-  background:#0caf7d;
-}
-</style>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<header class="header">
-  <div class="logo">TradeX</div>
-  <div class="live">● LIVE MODE</div>
-</header>
+  <div id="app">
 
-<main class="container" id="app"></main>
+    <!-- HEADER -->
+    <header class="header">
+      <div class="profile">
+        <div class="avatar">TX</div>
+        <div>
+          <small>Hello</small>
+          <strong>Trader</strong>
+        </div>
+      </div>
 
-<nav class="bottom">
+      <div class="header-icons">
+        <button onclick="showMessage('Search')">⌕</button>
+        <button onclick="showMessage('Notifications')">♧</button>
+      </div>
+    </header>
 
-<button class="nav active" onclick="showPage('home',this)">
-  <span>⌂</span>Home
-</button>
 
-<button class="nav" onclick="showPage('markets',this)">
-  <span>▣</span>Markets
-</button>
+    <!-- MARKET TICKER -->
+    <div class="ticker">
+      <div>
+        <b>NIFTY 50</b>
+        <span id="nifty">24,986.40</span>
+      </div>
 
-<button class="nav" onclick="showPage('trade',this)">
-  <span>↕</span>Trade
-</button>
+      <div class="profit" id="niftyChange">
+        +126.20 (+0.51%)
+      </div>
+    </div>
 
-<button class="nav" onclick="showPage('orders',this)">
-  <span>◷</span>Orders
-</button>
 
-<button class="nav" onclick="showPage('profile',this)">
-  <span>●</span>Profile
-</button>
+    <!-- PAGE CONTENT -->
+    <main id="page">
 
-</nav>
+      <!-- HOME -->
+      <section id="homePage" class="page active">
 
-<div class="modal" id="tradeModal">
-  <div class="modal-box">
+        <div class="verification">
+          <span>✓</span>
+          <div>
+            <b>Account ready</b>
+            <small>Explore TradeX in Real mode</small>
+          </div>
+        </div>
 
-    <h2 id="modalTitle">Buy BTC</h2>
+        <div class="money-card">
+          <small>Available balance</small>
+          <h2 id="balance">₹0</h2>
+        </div>
 
-    <div class="gray" id="modalPrice"></div>
+        <div class="hero">
+          <div>
+            <small>Trade smarter</small>
+            <h2>Invest or Trade</h2>
+            <p>Stocks, Futures & Options</p>
+          </div>
 
-    <input
-      type="number"
-      id="quantity"
-      placeholder="Enter quantity"
-      min="0.000001"
-      step="0.000001"
-    >
+          <button onclick="openOrder('NIFTY 50')">
+            Start Trading
+          </button>
+        </div>
 
-    <div class="modal-actions">
-      <button class="cancel" onclick="closeModal()">Cancel</button>
-      <button class="confirm" onclick="confirmTrade()">Confirm</button>
+        <div class="section-title">
+          <h2>Market</h2>
+          <button onclick="go('watchlist')">View all</button>
+        </div>
+
+        <div class="market-grid">
+
+          <button onclick="go('watchlist')">
+            <span>📊</span>
+            <b>Stocks</b>
+            <small>Equity</small>
+          </button>
+
+          <button onclick="go('orders')">
+            <span>⚡</span>
+            <b>Futures</b>
+            <small>F&O</small>
+          </button>
+
+          <button onclick="go('watchlist')">
+            <span>CE</span>
+            <b>Options</b>
+            <small>Option Chain</small>
+          </button>
+
+          <button onclick="showMessage('Commodities')">
+            <span>◈</span>
+            <b>Commodity</b>
+            <small>Coming soon</small>
+          </button>
+
+        </div>
+
+        <div class="section-title">
+          <h2>Market Indices</h2>
+        </div>
+
+        <div class="index-card">
+          <div>
+            <b>NIFTY 50</b>
+            <small>National Stock Exchange</small>
+          </div>
+          <div class="right">
+            <b id="indexPrice">24,986.40</b>
+            <span class="profit">+0.51%</span>
+          </div>
+        </div>
+
+        <div class="index-card">
+          <div>
+            <b>NIFTY BANK</b>
+            <small>Banking Index</small>
+          </div>
+          <div class="right">
+            <b>57,210.20</b>
+            <span class="loss">-0.41%</span>
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- WATCHLIST -->
+      <section id="watchlistPage" class="page">
+
+        <div class="page-heading">
+          <h1>Watchlist</h1>
+          <button onclick="showMessage('Add instrument')">＋</button>
+        </div>
+
+        <div class="search-box">
+          <span>⌕</span>
+          <input
+            id="searchInput"
+            type="text"
+            placeholder="Search stocks, ETFs, indices..."
+            oninput="searchStocks()"
+          >
+        </div>
+
+        <div class="chips">
+          <button class="selected">First Watchlist</button>
+          <button>Indices</button>
+          <button>Stocks</button>
+          <button>F&O</button>
+        </div>
+
+        <div id="watchlist"></div>
+
+      </section>
+
+
+      <!-- PORTFOLIO -->
+      <section id="portfolioPage" class="page">
+
+        <div class="page-heading">
+          <h1>Portfolio</h1>
+          <button onclick="showMessage('Portfolio settings')">⋮</button>
+        </div>
+
+        <div class="portfolio-tabs">
+          <button class="selected">All</button>
+          <button>Stocks</button>
+          <button>MF</button>
+          <button>US</button>
+          <button>ETF</button>
+        </div>
+
+        <div class="networth">
+          <div>
+            <small>Net Worth</small>
+            <h2 id="netWorth">₹0.00</h2>
+          </div>
+          <span>◉</span>
+        </div>
+
+        <h2 class="section-heading">Investments</h2>
+
+        <div class="investment-card">
+          <div class="investment-icon">📈</div>
+          <div>
+            <b>Stocks</b>
+            <small>Equity investments</small>
+          </div>
+          <strong id="stockValue">₹0.00</strong>
+        </div>
+
+        <div class="investment-card">
+          <div class="investment-icon">◫</div>
+          <div>
+            <b>Mutual Funds</b>
+            <small>Long-term investments</small>
+          </div>
+          <strong>₹0.00</strong>
+        </div>
+
+        <div class="investment-card">
+          <div class="investment-icon">ETF</div>
+          <div>
+            <b>ETFs</b>
+            <small>Exchange traded funds</small>
+          </div>
+          <strong>₹0.00</strong>
+        </div>
+
+        <div class="investment-card">
+          <div class="investment-icon">US</div>
+          <div>
+            <b>US Stocks</b>
+            <small>Global investments</small>
+          </div>
+          <strong>₹0.00</strong>
+        </div>
+
+      </section>
+
+
+      <!-- ORDERS -->
+      <section id="ordersPage" class="page">
+
+        <div class="page-heading">
+          <h1>Orders</h1>
+          <button onclick="showMessage('Order filter')">☷</button>
+        </div>
+
+        <div class="order-tabs">
+          <button class="selected">All</button>
+          <button>Open</button>
+          <button>Executed</button>
+          <button>Rejected</button>
+        </div>
+
+        <div id="ordersList" class="orders-list">
+          <div class="empty">
+            <div>▤</div>
+            <h3>No orders yet</h3>
+            <p>Your real orders will appear here.</p>
+          </div>
+        </div>
+
+        <button class="trade-button" onclick="openOrder('NIFTY 50')">
+          + Place real Order
+        </button>
+
+      </section>
+
+
+      <!-- MONEY -->
+      <section id="moneyPage" class="page">
+
+        <div class="page-heading">
+          <h1>Money</h1>
+          <button onclick="showMessage('Money settings')">⋮</button>
+        </div>
+
+        <div class="fund-card">
+          <small>Available Balance</small>
+          <h1 id="moneyBalance">₹0</h1>
+        </div>
+
+        <div class="money-actions">
+          <button onclick="depositreal()">
+            <span>＋</span>
+            <b>Add Money</b>
+            <small>real</small>
+          </button>
+
+          <button onclick="withdrawreal()">
+            <span>↗</span>
+            <b>Withdraw</b>
+            <small>Real</small>
+          </button>
+        </div>
+
+        <div class="qr-card">
+          <b>Deposit QR</b>
+          <p>QR payment interface will appear here.</p>
+          <button onclick="showMessage('QR payment screen')">
+            View QR
+          </button>
+        </div>
+
+        <div class="money-history">
+          <h2>Recent Activity</h2>
+          <p>No transactions yet.</p>
+        </div>
+
+      </section>
+
+    </main>
+
+
+    <!-- BOTTOM NAV -->
+    <nav class="bottom-nav">
+
+      <button class="nav active" onclick="go('home')">
+        <span>⌂</span>
+        Home
+      </button>
+
+      <button class="nav" onclick="go('watchlist')">
+        <span>★</span>
+        Watchlist
+      </button>
+
+      <button class="nav" onclick="go('portfolio')">
+        <span>▣</span>
+        Portfolio
+      </button>
+
+      <button class="nav" onclick="go('orders')">
+        <span>☷</span>
+        Orders
+      </button>
+
+      <button class="nav" onclick="go('money')">
+        <span>₹</span>
+        Money
+      </button>
+
+    </nav>
+
+  </div>
+
+
+  <!-- ORDER MODAL -->
+  <div id="orderModal" class="modal">
+
+    <div class="order-sheet">
+
+      <div class="sheet-header">
+        <h2 id="orderSymbol">NIFTY 50</h2>
+        <button onclick="closeOrder()">×</button>
+      </div>
+
+      <div class="buy-sell">
+        <button id="buyButton" class="buy active" onclick="setSide('BUY')">
+          BUY
+        </button>
+
+        <button id="sellButton" class="sell" onclick="setSide('SELL')">
+          SELL
+        </button>
+      </div>
+
+      <label>Order Type</label>
+      <select id="orderType">
+        <option>Market</option>
+        <option>Limit</option>
+        <option>SL</option>
+        <option>SL-M</option>
+      </select>
+
+      <label>Quantity</label>
+      <input id="quantity" type="number" min="1" value="1">
+
+      <label>Price</label>
+      <input id="orderPrice" type="number" value="100" step="0.05">
+
+      <button class="confirm" onclick="placeOrder()">
+        Confirm Live Order
+      </button>
+
     </div>
 
   </div>
-</div>
 
-<script>
 
-const assets = {
+  <div id="toast"></div>
 
-  stocks:[
-    {
-      symbol:"BTC / USD",
-      name:"Bitcoin",
-      price:67406.94,
-      change:"+2.41%",
-      high:68120,
-      low:65210
-    },
-    {
-      symbol:"AAPL",
-      name:"Apple",
-      price:229.80,
-      change:"+1.28%",
-      high:232.10,
-      low:224.30
-    },
-    {
-      symbol:"TSLA",
-      name:"Tesla",
-      price:342.55,
-      change:"+3.12%",
-      high:350.20,
-      low:331.40
-    }
-  ],
-
-  crypto:[
-    {
-      symbol:"ETH / USD",
-      name:"Ethereum",
-      price:3560.20,
-      change:"+1.92%",
-      high:3620,
-      low:3450
-    },
-    {
-      symbol:"BTC / USD",
-      name:"Bitcoin",
-      price:67406.94,
-      change:"+2.41%",
-      high:68120,
-      low:65210
-    }
-  ],
-
-  forex:[
-    {
-      symbol:"EUR / USD",
-      name:"Euro",
-      price:1.1742,
-      change:"+0.42%",
-      high:1.1790,
-      low:1.1680
-    },
-    {
-      symbol:"GBP / USD",
-      name:"British Pound",
-      price:1.3510,
-      change:"+0.31%",
-      high:1.3560,
-      low:1.3440
-    }
-  ]
-
-};
-
-let balance = Number(localStorage.getItem("balance")) || 10000;
-
-let orders =
-  JSON.parse(localStorage.getItem("orders") || "[]");
-
-let currentAsset = assets.stocks[0];
-
-let currentSide = "BUY";
-
-let currentPage = "home";
-
-function money(value){
-  return "$" + Number(value).toLocaleString(
-    "en-US",
-    {
-      minimumFractionDigits:2,
-      maximumFractionDigits:2
-    }
-  );
-}
-
-function save(){
-  localStorage.setItem("balance",balance);
-  localStorage.setItem("orders",JSON.stringify(orders));
-}
-
-function homePage(){
-
-return `
-
-<div class="balance">
-
-<small>Demo Wallet Balance</small>
-
-<h1>₹${balance.toLocaleString("en-IN",{
-  minimumFractionDigits:2
-})}</h1>
-
-<div class="profit">
-+ ₹250.00 Today
-</div>
-
-</div>
-
-<div class="tabs">
-
-<button class="tab active" onclick="selectMarket('stocks')">
-Stocks
-</button>
-
-<button class="tab" onclick="selectMarket('crypto')">
-Crypto
-</button>
-
-<button class="tab" onclick="selectMarket('forex')">
-Forex
-</button>
-
-</div>
-
-${assetCard(currentAsset)}
-
-`;
-
-}
-
-function assetCard(a){
-
-return `
-
-<div class="card">
-
-<div class="coin-top">
-
-<div>
-<div class="coin-name">${a.symbol}</div>
-<div class="coin-sub">${a.name}</div>
-</div>
-
-<div>
-<div class="price">${money(a.price)}</div>
-<div class="change">${a.change}</div>
-</div>
-
-</div>
-
-<div class="chart">
-
-<div class="line">
-
-<svg viewBox="0 0 500 120"
-preserveAspectRatio="none">
-
-<polyline
-points="0,100 40,75 75,92 110,45 145,65 180,20 220,42 255,8 295,30 330,5 365,25 400,0 440,15 500,5"
-fill="none"
-stroke="#25d7a0"
-stroke-width="5"
-/>
-
-</svg>
-
-</div>
-
-</div>
-
-<div class="highlow">
-
-<span>24h High: ${money(a.high)}</span>
-<span>24h Low: ${money(a.low)}</span>
-
-</div>
-
-<div class="actions">
-
-<button class="buy"
-onclick="openTrade('BUY')">
-BUY
-</button>
-
-<button class="sell"
-onclick="openTrade('SELL')">
-SELL
-</button>
-
-</div>
-
-</div>
-
-`;
-
-}
-
-function marketsPage(){
-
-return `
-
-<div class="section-title">
-Markets
-</div>
-
-<div class="tabs">
-
-<button class="tab active"
-onclick="renderMarkets('stocks')">
-Stocks
-</button>
-
-<button class="tab"
-onclick="renderMarkets('crypto')">
-Crypto
-</button>
-
-<button class="tab"
-onclick="renderMarkets('forex')">
-Forex
-</button>
-
-</div>
-
-<div id="marketList">
-
-${assets.stocks.map(a=>marketItem(a)).join("")}
-
-</div>
-
-`;
-
-}
-
-function marketItem(a){
-
-return `
-
-<div class="market-item"
-onclick='chooseAsset(${JSON.stringify(a)})'>
-
-<div class="market-left">
-
-<strong>${a.symbol}</strong>
-
-<span class="gray">${a.name}</span>
-
-</div>
-
-<div>
-
-<strong>${money(a.price)}</strong>
-
-<div class="green">${a.change}</div>
-
-</div>
-
-</div>
-
-`;
-
-}
-
-function tradePage(){
-
-return `
-
-<div class="section-title">
-Trade
-</div>
-
-<div class="card">
-
-<div class="coin-name">
-${currentAsset.symbol}
-</div>
-
-<div class="coin-sub">
-${currentAsset.name}
-</div>
-
-<h1 style="margin:20px 0">
-${money(currentAsset.price)}
-</h1>
-
-<div class="actions">
-
-<button class="buy"
-onclick="openTrade('BUY')">
-BUY
-</button>
-
-<button class="sell"
-onclick="openTrade('SELL')">
-SELL
-</button>
-
-</div>
-
-</div>
-
-`;
-
-}
-
-function ordersPage(){
-
-if(orders.length===0){
-
-return `
-
-<div class="section-title">
-Orders
-</div>
-
-<div class="empty">
-No orders yet.<br><br>
-Buy or Sell an asset to create an order.
-</div>
-
-`;
-
-}
-
-return `
-
-<div class="section-title">
-Orders
-</div>
-
-${orders.map(o=>`
-
-<div class="order">
-
-<div>
-
-<strong>${o.side} ${o.symbol}</strong>
-
-<div class="gray">
-Qty: ${o.quantity}
-</div>
-
-<div class="gray">
-${o.time}
-</div>
-
-</div>
-
-<div class="${o.side==="BUY"?"green":"red"}">
-${money(o.total)}
-</div>
-
-</div>
-
-`).join("")}
-
-`;
-
-}
-
-function profilePage(){
-
-return `
-
-<div class="section-title">
-Profile
-</div>
-
-<div class="profile-box">
-
-<div class="profile-row">
-<span>Account</span>
-<strong>Demo User</strong>
-</div>
-
-<div class="profile-row">
-<span>Account Type</span>
-<strong>Demo</strong>
-</div>
-
-<div class="profile-row">
-<span>Wallet</span>
-<strong>₹${balance.toLocaleString("en-IN")}</strong>
-</div>
-
-<div class="profile-row">
-<span>Total Orders</span>
-<strong>${orders.length}</strong>
-</div>
-
-<button class="reset" onclick="resetDemo()">
-Reset Demo Account
-</button>
-
-</div>
-
-`;
-
-}
-
-function render(){
-
-const app=document.getElementById("app");
-
-if(currentPage==="home")
-app.innerHTML=homePage();
-
-if(currentPage==="markets")
-app.innerHTML=marketsPage();
-
-if(currentPage==="trade")
-app.innerHTML=tradePage();
-
-if(currentPage==="orders")
-app.innerHTML=ordersPage();
-
-if(currentPage==="profile")
-app.innerHTML=profilePage();
-
-}
-
-function showPage(page,button){
-
-currentPage=page;
-
-document.querySelectorAll(".nav")
-.forEach(n=>n.classList.remove("active"));
-
-button.classList.add("active");
-
-render();
-
-}
-
-function selectMarket(type){
-
-currentAsset=assets[type][0];
-
-render();
-
-}
-
-function renderMarkets(type){
-
-document.getElementById("marketList").innerHTML =
-assets[type].map(a=>marketItem(a)).join("");
-
-}
-
-function chooseAsset(a){
-
-currentAsset=a;
-
-currentPage="trade";
-
-document.querySelectorAll(".nav")
-.forEach(n=>n.classList.remove("active"));
-
-document.querySelectorAll(".nav")[2]
-.classList.add("active");
-
-render();
-
-}
-
-function openTrade(side){
-
-currentSide=side;
-
-document.getElementById("modalTitle").innerText =
-side + " " + currentAsset.symbol;
-
-document.getElementById("modalPrice").innerText =
-"Price: " + money(currentAsset.price);
-
-document.getElementById("quantity").value="";
-
-document.getElementById("tradeModal").style.display="flex";
-
-}
-
-function closeModal(){
-
-document.getElementById("tradeModal").style.display="none";
-
-}
-
-function confirmTrade(){
-
-let qty=Number(
-document.getElementById("quantity").value
-);
-
-if(!qty || qty<=0){
-
-alert("Please enter a valid quantity.");
-
-return;
-
-}
-
-let total=qty*currentAsset.price;
-
-if(currentSide==="BUY"){
-
-if(total>balance){
-
-alert("Insufficient demo balance.");
-
-return;
-
-}
-
-balance-=total;
-
-}else{
-
-balance+=total;
-
-}
-
-orders.unshift({
-
-side:currentSide,
-
-symbol:currentAsset.symbol,
-
-quantity:qty,
-
-total:total,
-
-time:new Date().toLocaleString()
-
-});
-
-save();
-
-closeModal();
-
-alert(
-currentSide+" order placed successfully!"
-);
-
-currentPage="orders";
-
-document.querySelectorAll(".nav")
-.forEach(n=>n.classList.remove("active"));
-
-document.querySelectorAll(".nav")[3]
-.classList.add("active");
-
-render();
-
-}
-
-function resetDemo(){
-
-if(confirm("Reset demo account?")){
-
-balance=10000;
-
-orders=[];
-
-save();
-
-render();
-
-}
-
-}
-
-render();
-
-</script>
+  <script src="app.js"></script>
 
 </body>
-</html>
+  </html>
