@@ -964,7 +964,25 @@ function showLogin(){
 
 
 supabaseClient.auth.onAuthStateChange(
-  function(event, session){
+  document.addEventListener("DOMContentLoaded", function () {
+
+  const signupButton = document.querySelector(
+    '#authScreen button[onclick="signupUser()"]'
+  );
+
+  const loginButton = document.querySelector(
+    '#authScreen button[onclick="loginUser()"]'
+  );
+
+  if (signupButton) {
+    signupButton.addEventListener("click", signupUser);
+  }
+
+  if (loginButton) {
+    loginButton.addEventListener("click", loginUser);
+  }
+
+});function(event, session){
 
     if(session){
       showApp();
