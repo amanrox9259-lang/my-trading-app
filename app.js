@@ -32,10 +32,12 @@ const stocks = [
 // ============================
 
 async function signupUser() {
-
-  const email = document.getElementById("authEmail").value.trim();
-  const password = document.getElementById("authPassword").value;
+  const emailEl = document.getElementById("authEmail");
+  const passwordEl = document.getElementById("authPassword");
   const message = document.getElementById("authMessage");
+
+  const email = emailEl ? emailEl.value.trim() : "";
+  const password = passwordEl ? passwordEl.value : "";
 
   if (!email || !password) {
     message.textContent = "Email and password required.";
@@ -50,8 +52,8 @@ async function signupUser() {
   message.textContent = "Creating account...";
 
   const { data, error } = await supabaseClient.auth.signUp({
-    email,
-    password
+    email: email,
+    password: password
   });
 
   if (error) {
@@ -60,7 +62,8 @@ async function signupUser() {
   }
 
   if (data.user && !data.session) {
-    message.textContent = "Account created. Check your email to verify.";
+    message.textContent =
+      "Account created. Check your email to verify.";
     return;
   }
 
@@ -68,12 +71,13 @@ async function signupUser() {
   showApp();
 }
 
-
 async function loginUser() {
-
-  const email = document.getElementById("authEmail").value.trim();
-  const password = document.getElementById("authPassword").value;
+  const emailEl = document.getElementById("authEmail");
+  const passwordEl = document.getElementById("authPassword");
   const message = document.getElementById("authMessage");
+
+  const email = emailEl ? emailEl.value.trim() : "";
+  const password = passwordEl ? passwordEl.value : "";
 
   if (!email || !password) {
     message.textContent = "Email and password required.";
@@ -84,8 +88,8 @@ async function loginUser() {
 
   const { data, error } =
     await supabaseClient.auth.signInWithPassword({
-      email,
-      password
+      email: email,
+      password: password
     });
 
   if (error) {
@@ -97,22 +101,18 @@ async function loginUser() {
   showApp();
 }
 
-
 async function logoutUser() {
-
   const { error } = await supabaseClient.auth.signOut();
 
   if (error) {
-    console.error(error);
+    showMessage(error.message);
     return;
   }
 
   showLogin();
 }
 
-
 function showLogin() {
-
   const authScreen = document.getElementById("authScreen");
   const app = document.getElementById("app");
 
@@ -125,9 +125,7 @@ function showLogin() {
   }
 }
 
-
 function showApp() {
-
   const authScreen = document.getElementById("authScreen");
   const app = document.getElementById("app");
 
@@ -139,64 +137,266 @@ function showApp() {
     app.style.display = "block";
   }
 
-  if (typeof go === "function") {
-    go("home");
-  }
+  go("home");
 }
-
 
 // ============================
 // AUTH STATE
 // ============================
 
-supabaseClient.auth.onAuthStateChange(
-  function(event, session) {
-
-    if (session) {
-      showApp();
-    } else {
-      showLogin();
-    }
-
+supabaseClient.auth.onAuthStateChange(function(event, session) {
+  if (session) {
+    showApp();
+  } else {
+    showLogin();
   }
-);
-
+});
 
 // ============================
-// BASIC TRADING DATA
+// PAGE NAVIGATION
 // ============================
 
-function updateBalance() {
+function go(page) {
+  currentPage = page;
 
-  const balanceElements =
-    document.querySelectorAll(".balance");
+  const pages = {
+    home: "homePage",
+    watchlist: "watchlistPage",
+    portfolio: "portfolioPage",
+    orders: "ordersPage",
+    money: "moneyPage"
+  };
 
-  balanceElements.forEach(function(element) {
-    element.textContent =
-      "₹" + balance.toLocaleString("en-IN", {
-        minimumFractionDigits: 2
-      });
+  Object.keys(pages).forEach(function(key) {
+    const section = document.getElementById(pages[key]);
+
+    if (section) {
+      section.style.display = key === page ? "block" : "none";
+      section.classList.toggle("active", key === page);
+    }
+  });
+
+  document.querySelectorAll(".bottom-nav .nav").forEach(function(button) {
+    button.classList.remove("active");
+
+    const text = button.textContent.trim().toLowerCase();
+
+    if (
+      (page === "home" && text.includes("home")) ||
+      (page === "watchlist" && text.includes("watchlist")) ||
+      (page === "portfolio" && text.includes("portfolio")) ||
+      (page === "orders" && text.includes("orders")) ||
+      (page === "money" && text.includes("money"))
+    ) {
+      button.classList.add("active");
+    }
+  });
+
+  if (page === "watchlist") {
+    renderWatchlist();
+  }
+
+  if (page === "orders") {
+    renderOrders();
+  }
+
+  updateBalance();
+}
+
+// ============================
+// BALANCE
+// ============================
+
+function formatMoney(value) {
+  return "₹" + Number(value).toLocaleString("en-IN", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
   });
 }
 
+function updateBalance() {
+  const balanceIds = [
+    "balance",
+    "moneyBalance",
+    "netWorth",
+    "stockValue"
+  ];
 
-function placeOrder(symbol, quantity, price) {
+  balanceIds.forEach(function(id) {
+    const element = document.getElementById(id);
 
-  quantity = Number(quantity);
-  price = Number(price);
+    if (element) {
+      element.textContent = formatMoney(balance);
+    }
+  });
+}
 
-  if (!symbol || quantity <= 0 || price <= 0) {
+// ============================
+// WATCHLIST
+// ============================
+
+function renderWatchlist(list) {
+  const container = document.getElementById("watchlist");
+
+  if (!container) {
     return;
   }
+
+  const data = list || stocks;
+
+  container.innerHTML = "";
+
+  data.forEach(function(stock) {
+    const card = document.createElement("div");
+
+    card.className = "index-card";
+
+    card.innerHTML = `
+      <div>
+        <b>${stock.name}</b>
+        <small>${stock.symbol}</small>
+      </div>
+
+      <div class="right">
+        <b>${formatMoney(stock.price)}</b>
+        <span class="${stock.change >= 0 ? "profit" : "loss"}">
+          ${stock.change >= 0 ? "+" : ""}${stock.change}
+        </span>
+      </div>
+    `;
+
+    card.style.cursor = "pointer";
+
+    card.addEventListener("click", function() {
+      openOrder(stock.symbol);
+    });
+
+    container.appendChild(card);
+  });
+}
+
+function searchStocks() {
+  const input = document.getElementById("searchInput");
+
+  if (!input) {
+    return;
+  }
+
+  const query = input.value.trim().toLowerCase();
+
+  const filtered = stocks.filter(function(stock) {
+    return (
+      stock.name.toLowerCase().includes(query) ||
+      stock.symbol.toLowerCase().includes(query)
+    );
+  });
+
+  renderWatchlist(filtered);
+}
+
+// ============================
+// ORDER MODAL
+// ============================
+
+function openOrder(symbol) {
+  const modal = document.getElementById("orderModal");
+  const symbolElement = document.getElementById("orderSymbol");
+  const priceElement = document.getElementById("orderPrice");
+
+  const stock = stocks.find(function(item) {
+    return item.symbol === symbol || item.name === symbol;
+  });
+
+  if (symbolElement) {
+    symbolElement.textContent = stock
+      ? stock.name
+      : symbol;
+  }
+
+  if (priceElement && stock) {
+    priceElement.value = stock.price;
+  }
+
+  if (modal) {
+    modal.style.display = "flex";
+  }
+}
+
+function closeOrder() {
+  const modal = document.getElementById("orderModal");
+
+  if (modal) {
+    modal.style.display = "none";
+  }
+}
+
+function setSide(side) {
+  if (side !== "BUY" && side !== "SELL") {
+    return;
+  }
+
+  orderSide = side;
+
+  const buyButton = document.getElementById("buyButton");
+  const sellButton = document.getElementById("sellButton");
+
+  if (buyButton) {
+    buyButton.classList.toggle("active", side === "BUY");
+  }
+
+  if (sellButton) {
+    sellButton.classList.toggle("active", side === "SELL");
+  }
+}
+
+// Compatibility with old function name
+function setOrderSide(side) {
+  setSide(side);
+}
+
+// ============================
+// PLACE ORDER
+// ============================
+
+function placeOrder() {
+  const symbolElement = document.getElementById("orderSymbol");
+  const quantityElement = document.getElementById("quantity");
+  const priceElement = document.getElementById("orderPrice");
+
+  const symbolText = symbolElement
+    ? symbolElement.textContent.trim()
+    : "";
+
+  const quantity = Number(
+    quantityElement ? quantityElement.value : 0
+  );
+
+  const price = Number(
+    priceElement ? priceElement.value : 0
+  );
+
+  if (!symbolText || quantity <= 0 || price <= 0) {
+    showMessage("Enter valid order details.");
+    return;
+  }
+
+  const stock = stocks.find(function(item) {
+    return (
+      item.name === symbolText ||
+      item.symbol === symbolText
+    );
+  });
+
+  const symbol = stock ? stock.symbol : symbolText;
 
   const total = quantity * price;
 
-  if (orderSide === "BUY" && total > balance) {
-    alert("Insufficient balance.");
-    return;
-  }
-
   if (orderSide === "BUY") {
+    if (total > balance) {
+      showMessage("Insufficient balance.");
+      return;
+    }
+
     balance -= total;
   } else {
     balance += total;
@@ -209,97 +409,134 @@ function placeOrder(symbol, quantity, price) {
     quantity: quantity,
     price: price,
     total: total,
-    time: new Date().toLocaleString()
+    time: new Date().toLocaleString("en-IN")
   });
 
   updateBalance();
+  renderOrders();
+  closeOrder();
 
-  alert(
+  showMessage(
     orderSide +
-    " order placed for " +
+    " order placed: " +
     quantity +
     " × " +
     symbol
   );
 }
 
+// ============================
+// ORDERS
+// ============================
 
-function setOrderSide(side) {
+function renderOrders() {
+  const container = document.getElementById("ordersList");
 
-  if (side !== "BUY" && side !== "SELL") {
+  if (!container) {
     return;
   }
 
-  orderSide = side;
+  if (orders.length === 0) {
+    container.innerHTML = `
+      <div class="empty">
+        <div>▤</div>
+        <h3>No orders yet</h3>
+        <p>Your orders will appear here.</p>
+      </div>
+    `;
+    return;
+  }
 
-  document
-    .querySelectorAll("[data-order-side]")
-    .forEach(function(button) {
+  container.innerHTML = "";
 
-      button.classList.toggle(
-        "active",
-        button.getAttribute("data-order-side") === side
-      );
+  orders.slice().reverse().forEach(function(order) {
+    const item = document.createElement("div");
 
-    });
+    item.className = "index-card";
+
+    item.innerHTML = `
+      <div>
+        <b>${order.side} · ${order.symbol}</b>
+        <small>
+          ${order.quantity} × ${formatMoney(order.price)}
+        </small>
+        <small>${order.time}</small>
+      </div>
+
+      <div class="right">
+        <b>${formatMoney(order.total)}</b>
+        <span class="${order.side === "BUY" ? "profit" : "loss"}">
+          ${order.side}
+        </span>
+      </div>
+    `;
+
+    container.appendChild(item);
+  });
 }
 
-
 // ============================
-// PAGE NAVIGATION
+// MESSAGES
 // ============================
 
-function go(page) {
+function showMessage(message) {
+  const toast = document.getElementById("toast");
 
-  currentPage = page;
+  if (!toast) {
+    alert(message);
+    return;
+  }
 
-  document
-    .querySelectorAll("[data-page]")
-    .forEach(function(section) {
+  toast.textContent = message;
+  toast.style.display = "block";
 
-      section.style.display =
-        section.getAttribute("data-page") === page
-          ? "block"
-          : "none";
-
-    });
-
-  document
-    .querySelectorAll("[data-nav]")
-    .forEach(function(button) {
-
-      button.classList.toggle(
-        "active",
-        button.getAttribute("data-nav") === page
-      );
-
-    });
+  setTimeout(function() {
+    toast.style.display = "none";
+  }, 2500);
 }
 
+// ============================
+// MONEY
+// ============================
+
+function depositreal() {
+  showMessage("Real-money deposits are not enabled yet.");
+}
+
+function withdrawreal() {
+  showMessage("Real-money withdrawals are not enabled yet.");
+}
 
 // ============================
 // STARTUP
 // ============================
 
-document.addEventListener(
-  "DOMContentLoaded",
-  async function() {
+document.addEventListener("DOMContentLoaded", async function() {
+  console.log("TradeX JS loaded");
 
-    console.log("TradeX JS loaded");
+  const result = await supabaseClient.auth.getSession();
 
-    const {
-      data: {
-        session
-      }
-    } = await supabaseClient.auth.getSession();
-
-    if (session) {
-      showApp();
-    } else {
-      showLogin();
-    }
-
-    updateBalance();
-
+  if (result.error) {
+    console.error(result.error);
+    showLogin();
+    return;
   }
-);
+
+  const session = result.data.session;
+
+  if (session) {
+    showApp();
+  } else {
+    showLogin();
+  }
+
+  updateBalance();
+  renderWatchlist();
+  renderOrders();
+
+  const modal = document.getElementById("orderModal");
+
+  if (modal) {
+    modal.style.display = "none";
+  }
+});
