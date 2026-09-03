@@ -1,7 +1,9 @@
 const supabaseClient = window.supabase.createClient(
- console.log("TradeX JS loaded"); "https://ialhcvbmauefotujspag.supabase.co",
-  "sb_publishable_9ppoRoPfHeAPteYpR-GbVg_aDcTiWg9"
-););
+  "https://ialhcvbmauefotujspag.supabase.co",
+  "APNI_NAYI_PUBLISHABLE_KEY"
+);
+
+console.log("TradeX JS loaded");
 );let currentPage = "home";
 let orderSide = "BUY";
 
