@@ -4,7 +4,7 @@ const supabaseClient = window.supabase.createClient(
 );
 
 console.log("TradeX JS loaded");
-);let currentPage = "home";
+let currentPage = "home";
 let orderSide = "BUY";
 
 let balance = 100000;
