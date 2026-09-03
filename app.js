@@ -4,7 +4,7 @@
 
 const supabaseClient = window.supabase.createClient(
   "https://ialhcvbmauefotujspag.supabase.co",
-  "sb_publishable_eH2SkZ3WtnsdGzRt307o_w_n2zmmAud"
+  "sb_publishable_Czoh8Wm1FxlwSZVDTLVwcg_7JnehAXf"
 );
 
 // ============================
