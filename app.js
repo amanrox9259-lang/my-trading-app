@@ -1,6 +1,6 @@
 const supabaseClient = window.supabase.createClient(
   "https://ialhcvbmauefotujspag.supabase.co",
-  "APNI_NAYI_PUBLISHABLE_KEY"
+  "sb_publishable_JMrXOvoxVqoE5KGe6imi6Q_Cfr6i0Vh"
 );
 
 console.log("TradeX JS loaded");
