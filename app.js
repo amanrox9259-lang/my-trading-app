@@ -1,5 +1,5 @@
 const supabaseClient = window.supabase.createClient(
-  "https://ialhcvbmauefotujspag.supabase.co",
+ console.log("TradeX JS loaded"); "https://ialhcvbmauefotujspag.supabase.co",
   "sb_publishable_9ppoRoPfHeAPteYpR-GbVg_aDcTiWg9"
 ););
 );let currentPage = "home";
