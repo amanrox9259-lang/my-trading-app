@@ -6,7 +6,9 @@
 <title>TradeX Admin Panel</title>
 
 <style>
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
 body{
   margin:0;
@@ -15,16 +17,24 @@ body{
   color:#fff;
 }
 
-button,input,select{font:inherit}
-button{cursor:pointer}
+button,
+input,
+select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
 
 .header{
-  padding:18px;
+  padding:16px 20px;
   background:#0d1b2a;
   border-bottom:1px solid #20344b;
   display:flex;
   justify-content:space-between;
   align-items:center;
+  gap:15px;
 }
 
 .logo{
@@ -45,8 +55,14 @@ button{cursor:pointer}
   font-weight:800;
 }
 
-.header h1{margin:0;font-size:20px}
-.header small{color:#8fa3b8}
+.header h1{
+  margin:0;
+  font-size:20px;
+}
+
+.header small{
+  color:#8fa3b8;
+}
 
 .logout{
   border:0;
@@ -56,11 +72,18 @@ button{cursor:pointer}
   color:#fff;
 }
 
+.logout:hover,
+.refresh:hover{
+  background:#223b55;
+}
+
 .container{
   max-width:1200px;
   margin:auto;
   padding:20px;
 }
+
+/* LOGIN */
 
 #loginScreen{
   min-height:100vh;
@@ -72,14 +95,16 @@ button{cursor:pointer}
 
 .login-box{
   width:100%;
-  max-width:380px;
+  max-width:390px;
   background:#0d1b2a;
   border:1px solid #20344b;
   border-radius:20px;
   padding:28px;
 }
 
-.login-box h2{margin-top:0}
+.login-box h2{
+  margin:0;
+}
 
 .login-box input{
   width:100%;
@@ -89,6 +114,11 @@ button{cursor:pointer}
   border:1px solid #294057;
   background:#07111f;
   color:#fff;
+  outline:none;
+}
+
+.login-box input:focus{
+  border-color:#19c37d;
 }
 
 .primary{
@@ -102,14 +132,33 @@ button{cursor:pointer}
   font-weight:700;
 }
 
+.primary:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
+
 #loginMessage{
   display:block;
   margin-top:12px;
   color:#8fa3b8;
-  line-height:1.4;
+  line-height:1.5;
 }
 
-#adminApp{display:none}
+.error{
+  color:#ff8585 !important;
+}
+
+.success{
+  color:#19c37d !important;
+}
+
+/* ADMIN */
+
+#adminApp{
+  display:none;
+}
+
+/* STATS */
 
 .stats{
   display:grid;
@@ -125,14 +174,22 @@ button{cursor:pointer}
   padding:18px;
 }
 
-.stat small{color:#8fa3b8}
-.stat h2{margin:8px 0 0}
+.stat small{
+  color:#8fa3b8;
+}
+
+.stat h2{
+  margin:8px 0 0;
+}
+
+/* TABS */
 
 .tabs{
   display:flex;
   gap:8px;
   overflow:auto;
   margin-bottom:18px;
+  padding-bottom:3px;
 }
 
 .tab{
@@ -150,8 +207,17 @@ button{cursor:pointer}
   border-color:#19c37d;
 }
 
-.panel{display:none}
-.panel.active{display:block}
+/* PANELS */
+
+.panel{
+  display:none;
+}
+
+.panel.active{
+  display:block;
+}
+
+/* CARDS */
 
 .card{
   background:#0d1b2a;
@@ -170,7 +236,9 @@ button{cursor:pointer}
   margin-bottom:14px;
 }
 
-.card-header h2{margin:0}
+.card-header h2{
+  margin:0;
+}
 
 .refresh{
   border:0;
@@ -180,13 +248,16 @@ button{cursor:pointer}
   color:#fff;
 }
 
+/* TABLE */
+
 table{
   width:100%;
   border-collapse:collapse;
   min-width:700px;
 }
 
-th,td{
+th,
+td{
   text-align:left;
   padding:11px;
   border-bottom:1px solid #20344b;
@@ -197,6 +268,14 @@ th{
   font-size:13px;
 }
 
+.empty{
+  padding:30px;
+  text-align:center;
+  color:#8fa3b8;
+}
+
+/* BADGES */
+
 .badge{
   display:inline-block;
   padding:5px 8px;
@@ -205,11 +284,21 @@ th{
   background:#17283a;
 }
 
-.pending{color:#ffd166}
-.approved{color:#19c37d}
-.rejected{color:#ff6b6b}
-.executed{color:#19c37d}
-.cancelled{color:#ff6b6b}
+.pending{
+  color:#ffd166;
+}
+
+.approved,
+.executed{
+  color:#19c37d;
+}
+
+.rejected,
+.cancelled{
+  color:#ff6b6b;
+}
+
+/* ACTION BUTTONS */
 
 .action{
   border:0;
@@ -228,11 +317,7 @@ th{
   color:#ff8d8d;
 }
 
-.empty{
-  padding:30px;
-  text-align:center;
-  color:#8fa3b8;
-}
+/* INSTRUMENT */
 
 .instrument-form{
   display:grid;
@@ -247,6 +332,12 @@ th{
   border-radius:8px;
   background:#07111f;
   color:#fff;
+  outline:none;
+}
+
+.instrument-form input:focus,
+.instrument-form select:focus{
+  border-color:#19c37d;
 }
 
 .instrument-form button{
@@ -258,6 +349,8 @@ th{
   padding:10px 15px;
 }
 
+/* MESSAGE */
+
 .message{
   padding:12px;
   border-radius:8px;
@@ -266,35 +359,72 @@ th{
   margin-bottom:12px;
 }
 
+/* MOBILE */
+
 @media(max-width:800px){
-  .stats{grid-template-columns:1fr 1fr}
-  .instrument-form{grid-template-columns:1fr 1fr}
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .instrument-form{
+    grid-template-columns:1fr 1fr;
+  }
+
 }
 
 @media(max-width:500px){
-  .stats{grid-template-columns:1fr}
-  .header{padding:14px}
-  .container{padding:12px}
+
+  .stats{
+    grid-template-columns:1fr;
+  }
+
+  .header{
+    padding:14px;
+  }
+
+  .container{
+    padding:12px;
+  }
+
+  .header h1{
+    font-size:17px;
+  }
+
+  .logo-icon{
+    width:40px;
+    height:40px;
+  }
+
 }
 </style>
 </head>
 
 <body>
 
-<!-- ================= LOGIN ================= -->
+
+<!-- =====================================================
+     LOGIN SCREEN
+===================================================== -->
 
 <div id="loginScreen">
 
   <div class="login-box">
 
     <div class="logo">
-      <div class="logo-icon">TX</div>
+
+      <div class="logo-icon">
+        TX
+      </div>
 
       <div>
         <h2>TradeX Admin</h2>
         <small>Secure Control Panel</small>
       </div>
+
     </div>
+
+    <br>
 
     <input
       id="adminEmail"
@@ -325,399 +455,495 @@ th{
 </div>
 
 
-<!-- ================= ADMIN APP ================= -->
+<!-- =====================================================
+     ADMIN APP
+===================================================== -->
 
 <div id="adminApp">
+
 
 <header class="header">
 
   <div class="logo">
 
-    <div class="logo-icon">TX</div>
+    <div class="logo-icon">
+      TX
+    </div>
 
     <div>
       <h1>TradeX Admin Panel</h1>
-      <small id="adminEmailDisplay">Admin</small>
+      <small id="adminEmailDisplay">
+        Admin
+      </small>
     </div>
 
   </div>
 
   <button
-    class="logout"
     id="logoutButton"
+    class="logout"
     type="button"
   >
     Logout
   </button>
 
-</header> 
+</header>
+
 
 <main class="container">
 
-  <!-- STATS -->
 
-  <div class="stats">
+<!-- =====================================================
+     STATS
+===================================================== -->
 
-    <div class="stat">
-      <small>Total Users</small>
-      <h2 id="usersCount">0</h2>
+<div class="stats">
+
+  <div class="stat">
+    <small>Total Users</small>
+    <h2 id="usersCount">0</h2>
+  </div>
+
+  <div class="stat">
+    <small>Pending Deposits</small>
+    <h2 id="pendingDeposits">0</h2>
+  </div>
+
+  <div class="stat">
+    <small>Pending Withdrawals</small>
+    <h2 id="pendingWithdrawals">0</h2>
+  </div>
+
+  <div class="stat">
+    <small>Total Orders</small>
+    <h2 id="ordersCount">0</h2>
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     TABS
+===================================================== -->
+
+<div class="tabs">
+
+  <button
+    class="tab active"
+    data-panel="dashboard"
+    type="button"
+  >
+    Dashboard
+  </button>
+
+  <button
+    class="tab"
+    data-panel="users"
+    type="button"
+  >
+    Users
+  </button>
+
+  <button
+    class="tab"
+    data-panel="deposits"
+    type="button"
+  >
+    Deposits
+  </button>
+
+  <button
+    class="tab"
+    data-panel="withdrawals"
+    type="button"
+  >
+    Withdrawals
+  </button>
+
+  <button
+    class="tab"
+    data-panel="orders"
+    type="button"
+  >
+    Orders
+  </button>
+
+  <button
+    class="tab"
+    data-panel="instruments"
+    type="button"
+  >
+    Instruments
+  </button>
+
+</div>
+
+
+<!-- =====================================================
+     DASHBOARD
+===================================================== -->
+
+<section
+  id="dashboard"
+  class="panel active"
+>
+
+  <div class="card">
+
+    <div class="card-header">
+
+      <h2>Admin Dashboard</h2>
+
+      <button
+        id="dashboardRefresh"
+        class="refresh"
+        type="button"
+      >
+        Refresh
+      </button>
+
     </div>
 
-    <div class="stat">
-      <small>Pending Deposits</small>
-      <h2 id="pendingDeposits">0</h2>
+    <p>
+      यहाँ से TradeX users, deposits,
+      withdrawals और orders monitor किए जा सकते हैं।
+    </p>
+
+    <p>
+      <b>Admin:</b>
+      <span id="dashboardAdminEmail">
+        -
+      </span>
+    </p>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     USERS
+===================================================== -->
+
+<section
+  id="users"
+  class="panel"
+>
+
+  <div class="card">
+
+    <div class="card-header">
+
+      <h2>Users</h2>
+
+      <button
+        id="usersRefresh"
+        class="refresh"
+        type="button"
+      >
+        Refresh
+      </button>
+
     </div>
 
-    <div class="stat">
-      <small>Pending Withdrawals</small>
-      <h2 id="pendingWithdrawals">0</h2>
+    <table>
+
+      <thead>
+
+        <tr>
+          <th>User ID</th>
+          <th>Name</th>
+          <th>Role</th>
+          <th>Balance</th>
+          <th>Created</th>
+        </tr>
+
+      </thead>
+
+      <tbody id="usersTable"></tbody>
+
+    </table>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     DEPOSITS
+===================================================== -->
+
+<section
+  id="deposits"
+  class="panel"
+>
+
+  <div class="card">
+
+    <div class="card-header">
+
+      <h2>Deposit Requests</h2>
+
+      <button
+        id="depositsRefresh"
+        class="refresh"
+        type="button"
+      >
+        Refresh
+      </button>
+
     </div>
 
-    <div class="stat">
-      <small>Total Orders</small>
-      <h2 id="ordersCount">0</h2>
+    <table>
+
+      <thead>
+
+        <tr>
+          <th>Amount</th>
+          <th>User</th>
+          <th>Method</th>
+          <th>Reference</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+
+      </thead>
+
+      <tbody id="depositsTable"></tbody>
+
+    </table>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     WITHDRAWALS
+===================================================== -->
+
+<section
+  id="withdrawals"
+  class="panel"
+>
+
+  <div class="card">
+
+    <div class="card-header">
+
+      <h2>Withdrawal Requests</h2>
+
+      <button
+        id="withdrawalsRefresh"
+        class="refresh"
+        type="button"
+      >
+        Refresh
+      </button>
+
+    </div>
+
+    <table>
+
+      <thead>
+
+        <tr>
+          <th>Amount</th>
+          <th>User</th>
+          <th>Method</th>
+          <th>Account</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+
+      </thead>
+
+      <tbody id="withdrawalsTable"></tbody>
+
+    </table>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     ORDERS
+===================================================== -->
+
+<section
+  id="orders"
+  class="panel"
+>
+
+  <div class="card">
+
+    <div class="card-header">
+
+      <h2>Orders</h2>
+
+      <button
+        id="ordersRefresh"
+        class="refresh"
+        type="button"
+      >
+        Refresh
+      </button>
+
+    </div>
+
+    <table>
+
+      <thead>
+
+        <tr>
+          <th>Symbol</th>
+          <th>Side</th>
+          <th>Quantity</th>
+          <th>Price</th>
+          <th>Status</th>
+          <th>Time</th>
+        </tr>
+
+      </thead>
+
+      <tbody id="ordersTable"></tbody>
+
+    </table>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     INSTRUMENTS
+===================================================== -->
+
+<section
+  id="instruments"
+  class="panel"
+>
+
+  <div class="card">
+
+    <div class="card-header">
+
+      <h2>Market Instruments</h2>
+
+      <button
+        id="instrumentsRefresh"
+        class="refresh"
+        type="button"
+      >
+        Refresh
+      </button>
+
+    </div>
+
+
+    <div class="instrument-form">
+
+      <input
+        id="instrumentSymbol"
+        placeholder="Symbol"
+      >
+
+      <input
+        id="instrumentName"
+        placeholder="Name"
+      >
+
+      <select id="instrumentType">
+
+        <option value="stock">
+          Stock
+        </option>
+
+        <option value="index">
+          Index
+        </option>
+
+        <option value="futures">
+          Futures
+        </option>
+
+        <option value="options">
+          Options
+        </option>
+
+      </select>
+
+      <input
+        id="instrumentPrice"
+        type="number"
+        step="0.01"
+        min="0"
+        placeholder="Price"
+      >
+
+      <button
+        id="addInstrumentButton"
+        type="button"
+      >
+        Add
+      </button>
+
     </div>
 
   </div>
 
 
-  <!-- TABS -->
+  <div class="card">
 
-  <div class="tabs">
+    <table>
 
-    <button class="tab active" data-panel="dashboard">
-      Dashboard
-    </button>
+      <thead>
 
-    <button class="tab" data-panel="users">
-      Users
-    </button>
+        <tr>
+          <th>Symbol</th>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Price</th>
+          <th>Change</th>
+          <th>Active</th>
+        </tr>
 
-    <button class="tab" data-panel="deposits">
-      Deposits
-    </button>
+      </thead>
 
-    <button class="tab" data-panel="withdrawals">
-      Withdrawals
-    </button>
+      <tbody id="instrumentsTable"></tbody>
 
-    <button class="tab" data-panel="orders">
-      Orders
-    </button>
-
-    <button class="tab" data-panel="instruments">
-      Instruments
-    </button>
+    </table>
 
   </div>
 
+</section>
 
-  <!-- DASHBOARD -->
-
-  <section id="dashboard" class="panel active">
-
-    <div class="card">
-
-      <div class="card-header">
-
-        <h2>Admin Dashboard</h2>
-
-        <button
-          class="refresh"
-          id="dashboardRefresh"
-          type="button"
-        >
-          Refresh
-        </button>
-
-      </div>
-
-      <p>
-        यहाँ से TradeX users, deposits,
-        withdrawals और orders monitor किए जा सकते हैं।
-      </p>
-
-      <p>
-        <b>Important:</b>
-        Balance केवल verified admin actions से बदलेगा।
-      </p>
-
-    </div>
-
-  </section>
-
-
-  <!-- USERS -->
-
-  <section id="users" class="panel">
-
-    <div class="card">
-
-      <div class="card-header">
-
-        <h2>Users</h2>
-
-        <button
-          class="refresh"
-          id="usersRefresh"
-          type="button"
-        >
-          Refresh
-        </button>
-
-      </div>
-
-      <table>
-
-        <thead>
-          <tr>
-            <th>User ID</th>
-            <th>Name</th>
-            <th>Role</th>
-            <th>Balance</th>
-            <th>Created</th>
-          </tr>
-        </thead>
-
-        <tbody id="usersTable"></tbody>
-
-      </table>
-
-    </div>
-
-  </section>
-
-
-  <!-- DEPOSITS -->
-
-  <section id="deposits" class="panel">
-
-    <div class="card">
-
-      <div class="card-header">
-
-        <h2>Deposit Requests</h2>
-
-        <button
-          class="refresh"
-          id="depositsRefresh"
-          type="button"
-        >
-          Refresh
-        </button>
-
-      </div>
-
-      <table>
-
-        <thead>
-          <tr>
-            <th>Amount</th>
-            <th>User</th>
-            <th>Method</th>
-            <th>Reference</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-
-        <tbody id="depositsTable"></tbody>
-
-      </table>
-
-    </div>
-
-  </section>
-
-
-  <!-- WITHDRAWALS -->
-
-  <section id="withdrawals" class="panel">
-
-    <div class="card">
-
-      <div class="card-header">
-
-        <h2>Withdrawal Requests</h2>
-
-        <button
-          class="refresh"
-          id="withdrawalsRefresh"
-          type="button"
-        >
-          Refresh
-        </button>
-
-      </div>
-
-      <table>
-
-        <thead>
-          <tr>
-            <th>Amount</th>
-            <th>User</th>
-            <th>Method</th>
-            <th>Account</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-
-        <tbody id="withdrawalsTable"></tbody>
-
-      </table>
-
-    </div>
-
-  </section>
-
-
-  <!-- ORDERS -->
-
-  <section id="orders" class="panel">
-
-    <div class="card">
-
-      <div class="card-header">
-
-        <h2>Orders</h2>
-
-        <button
-          class="refresh"
-          id="ordersRefresh"
-          type="button"
-        >
-          Refresh
-        </button>
-
-      </div>
-
-      <table>
-
-        <thead>
-          <tr>
-            <th>Symbol</th>
-            <th>Side</th>
-            <th>Quantity</th>
-            <th>Price</th>
-            <th>Status</th>
-            <th>Time</th>
-          </tr>
-        </thead>
-
-        <tbody id="ordersTable"></tbody>
-
-      </table>
-
-    </div>
-
-  </section>
-
-
-  <!-- INSTRUMENTS -->
-
-  <section id="instruments" class="panel">
-
-    <div class="card">
-
-      <div class="card-header">
-
-        <h2>Market Instruments</h2>
-
-        <button
-          class="refresh"
-          id="instrumentsRefresh"
-          type="button"
-        >
-          Refresh
-        </button>
-
-      </div>
-
-      <div class="instrument-form">
-
-        <input
-          id="instrumentSymbol"
-          placeholder="Symbol"
-        >
-
-        <input
-          id="instrumentName"
-          placeholder="Name"
-        >
-
-        <select id="instrumentType">
-
-          <option value="stock">Stock</option>
-          <option value="index">Index</option>
-          <option value="futures">Futures</option>
-          <option value="options">Options</option>
-
-        </select>
-
-        <input
-          id="instrumentPrice"
-          type="number"
-          step="0.01"
-          min="0"
-          placeholder="Price"
-        >
-
-        <button
-          id="addInstrumentButton"
-          type="button"
-        >
-          Add
-        </button>
-
-      </div>
-
-    </div>
-
-
-    <div class="card">
-
-      <table>
-
-        <thead>
-          <tr>
-            <th>Symbol</th>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Price</th>
-            <th>Change</th>
-            <th>Active</th>
-          </tr>
-        </thead>
-
-        <tbody id="instrumentsTable"></tbody>
-
-      </table>
-
-    </div>
-
-  </section>
 
 </main>
 
 </div>
 
 
-<!-- SUPABASE -->
+<!-- =====================================================
+     SUPABASE LIBRARY
+===================================================== -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 
 <script>
 
 /* =====================================================
-   SUPABASE
-   ===================================================== */
+   SUPABASE CONFIG
+===================================================== */
 
 const SUPABASE_URL =
   "https://ialhcvbmauefotujspag.supabase.co";
 
 const SUPABASE_ANON_KEY =
   "sb_publishable_NT_JybG43uFNvw-Kh-IW9A_QD8g9lc9";
+
 
 const supabaseClient =
   window.supabase.createClient(
@@ -728,11 +954,14 @@ const supabaseClient =
 
 /* =====================================================
    HELPERS
-   ===================================================== */
+===================================================== */
 
 function esc(value){
 
-  if(value === null || value === undefined){
+  if(
+    value === null ||
+    value === undefined
+  ){
     return "";
   }
 
@@ -748,27 +977,68 @@ function esc(value){
 function money(value){
 
   return "₹" +
-    Number(value || 0).toLocaleString(
-      "en-IN",
-      {
-        minimumFractionDigits:2,
-        maximumFractionDigits:2
-      }
-    );
+    Number(value || 0)
+      .toLocaleString(
+        "en-IN",
+        {
+          minimumFractionDigits:2,
+          maximumFractionDigits:2
+        }
+      );
 }
 
 
-function setLoginMessage(text){
+function setLoginMessage(
+  text,
+  type=""
+){
 
-  document
-    .getElementById("loginMessage")
-    .textContent = text;
+  const message =
+    document.getElementById(
+      "loginMessage"
+    );
+
+  message.textContent = text;
+
+  message.className = "";
+
+  if(type === "error"){
+    message.classList.add("error");
+  }
+
+  if(type === "success"){
+    message.classList.add("success");
+  }
+}
+
+
+function showAdmin(){
+
+  document.getElementById(
+    "loginScreen"
+  ).style.display = "none";
+
+  document.getElementById(
+    "adminApp"
+  ).style.display = "block";
+}
+
+
+function showLogin(){
+
+  document.getElementById(
+    "loginScreen"
+  ).style.display = "flex";
+
+  document.getElementById(
+    "adminApp"
+  ).style.display = "none";
 }
 
 
 /* =====================================================
    ADMIN LOGIN
-   ===================================================== */
+===================================================== */
 
 async function adminLogin(){
 
@@ -783,164 +1053,357 @@ async function adminLogin(){
       .getElementById("adminPassword")
       .value;
 
-  if(!email || !password){
+
+  if(!email){
 
     setLoginMessage(
-      "Email and password required."
+      "Admin email required.",
+      "error"
     );
 
     return;
   }
+
+
+  if(!password){
+
+    setLoginMessage(
+      "Password required.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  const button =
+    document.getElementById(
+      "loginButton"
+    );
+
+  button.disabled = true;
+
+  button.textContent =
+    "Logging in...";
+
 
   setLoginMessage(
     "Checking admin access..."
   );
 
-  const {data,error} =
-    await supabaseClient.auth.signInWithPassword({
-      email:email,
-      password:password
-    });
 
-  if(error){
+  try{
 
-    setLoginMessage(
-      error.message
-    );
-
-    return;
-  }
-
-  if(!data.user){
-
-    setLoginMessage(
-      "Login failed."
-    );
-
-    return;
-  }
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.auth
+        .signInWithPassword({
+          email:email,
+          password:password
+        });
 
 
-  const {
-    data:profile,
-    error:profileError
-  } =
-    await supabaseClient
-      .from("profiles")
-      .select("id,full_name,role,balance")
-      .eq("id",data.user.id)
-      .maybeSingle();
+    if(error){
+
+      setLoginMessage(
+        error.message,
+        "error"
+      );
+
+      return;
+    }
 
 
-  if(profileError){
+    if(!data || !data.user){
 
-    await supabaseClient.auth.signOut();
+      setLoginMessage(
+        "Login failed.",
+        "error"
+      );
 
-    setLoginMessage(
-      "Could not verify admin profile: " +
-      profileError.message
-    );
-
-    return;
-  }
+      return;
+    }
 
 
-  if(!profile){
-
-    await supabaseClient.auth.signOut();
-
-    setLoginMessage(
-      "Admin profile not found."
-    );
-
-    return;
-  }
-
-
-  if(profile.role !== "admin"){
-
-    await supabaseClient.auth.signOut();
-
-    setLoginMessage(
-      "Access denied. Admin account required."
-    );
-
-    return;
-  }
+    const {
+      data:profile,
+      error:profileError
+    } =
+      await supabaseClient
+        .from("profiles")
+        .select(
+          "id,full_name,role,balance"
+        )
+        .eq(
+          "id",
+          data.user.id
+        )
+        .maybeSingle();
 
 
-  document
-    .getElementById("adminEmailDisplay")
-    .textContent =
+    if(profileError){
+
+      await supabaseClient.auth.signOut();
+
+      setLoginMessage(
+        "Profile verification failed: " +
+        profileError.message,
+        "error"
+      );
+
+      return;
+    }
+
+
+    if(!profile){
+
+      await supabaseClient.auth.signOut();
+
+      setLoginMessage(
+        "Admin profile not found.",
+        "error"
+      );
+
+      return;
+    }
+
+
+    if(
+      String(profile.role)
+        .toLowerCase() !== "admin"
+    ){
+
+      await supabaseClient.auth.signOut();
+
+      setLoginMessage(
+        "Access denied. Admin account required.",
+        "error"
+      );
+
+      return;
+    }
+
+
+    const displayName =
       profile.full_name
-        ? profile.full_name + " • " + email
-        : email;
+        ? profile.full_name +
+          " • " +
+          data.user.email
+        : data.user.email;
 
 
-  document
-    .getElementById("loginScreen")
-    .style.display = "none";
-
-  document
-    .getElementById("adminApp")
-    .style.display = "block";
+    document.getElementById(
+      "adminEmailDisplay"
+    ).textContent = displayName;
 
 
-  await loadAll();
+    document.getElementById(
+      "dashboardAdminEmail"
+    ).textContent =
+      data.user.email;
+
+
+    showAdmin();
+
+
+    setLoginMessage("");
+
+
+    await loadAll();
+
+  }
+  catch(error){
+
+    setLoginMessage(
+      "Unexpected error: " +
+      error.message,
+      "error"
+    );
+
+  }
+  finally{
+
+    button.disabled = false;
+
+    button.textContent =
+      "Admin Login";
+
+  }
+
 }
 
 
 /* =====================================================
    LOGOUT
-   ===================================================== */
+===================================================== */
 
 async function adminLogout(){
 
   await supabaseClient.auth.signOut();
 
-  document
-    .getElementById("adminApp")
-    .style.display = "none";
+  document.getElementById(
+    "adminPassword"
+  ).value = "";
 
-  document
-    .getElementById("loginScreen")
-    .style.display = "flex";
+  showLogin();
 
-  document
-    .getElementById("adminPassword")
-    .value = "";
-
-  setLoginMessage("");
 }
 
 
 /* =====================================================
-   PANELS
-   ===================================================== */
+   CHECK EXISTING SESSION
+===================================================== */
 
-async function showPanel(id,button){
+async function checkAdminSession(){
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.auth
+        .getSession();
+
+
+    if(error){
+
+      console.log(
+        "Session error:",
+        error.message
+      );
+
+      return;
+    }
+
+
+    const session =
+      data.session;
+
+
+    if(!session || !session.user){
+
+      return;
+    }
+
+
+    const user =
+      session.user;
+
+
+    const {
+      data:profile,
+      error:profileError
+    } =
+      await supabaseClient
+        .from("profiles")
+        .select(
+          "id,full_name,role,balance"
+        )
+        .eq(
+          "id",
+          user.id
+        )
+        .maybeSingle();
+
+
+    if(
+      profileError ||
+      !profile ||
+      String(profile.role)
+        .toLowerCase() !== "admin"
+    ){
+
+      await supabaseClient.auth.signOut();
+
+      return;
+    }
+
+
+    document.getElementById(
+      "adminEmailDisplay"
+    ).textContent =
+      profile.full_name
+        ? profile.full_name +
+          " • " +
+          user.email
+        : user.email;
+
+
+    document.getElementById(
+      "dashboardAdminEmail"
+    ).textContent =
+      user.email;
+
+
+    showAdmin();
+
+
+    await loadAll();
+
+  }
+  catch(error){
+
+    console.log(
+      "Session check error:",
+      error.message
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   PANEL SWITCH
+===================================================== */
+
+async function showPanel(
+  id,
+  button
+){
 
   document
     .querySelectorAll(".panel")
-    .forEach(panel =>
-      panel.classList.remove("active")
+    .forEach(
+      panel =>
+        panel.classList.remove(
+          "active"
+        )
     );
+
 
   document
     .querySelectorAll(".tab")
-    .forEach(tab =>
-      tab.classList.remove("active")
+    .forEach(
+      tab =>
+        tab.classList.remove(
+          "active"
+        )
     );
+
 
   const panel =
     document.getElementById(id);
 
+
   if(panel){
-    panel.classList.add("active");
+
+    panel.classList.add(
+      "active"
+    );
+
   }
 
+
   if(button){
-    button.classList.add("active");
+
+    button.classList.add(
+      "active"
+    );
+
   }
 
 
@@ -963,302 +1426,86 @@ async function showPanel(id,button){
   if(id === "instruments"){
     await loadInstruments();
   }
+
 }
 
 
 /* =====================================================
    USERS
-   ===================================================== */
+===================================================== */
 
 async function loadUsers(){
 
   const table =
-    document.getElementById("usersTable");
+    document.getElementById(
+          "usersTable"
+  );
 
   table.innerHTML =
-    `<tr><td colspan="5">Loading...</td></tr>`;
+    '<tr><td colspan="5">Loading...</td></tr>';
 
-
-  const {data,error} =
+  const { data, error } =
     await supabaseClient
       .from("profiles")
-      .select(
-        "id,full_name,role,balance,created_at"
-      )
-      .order(
-        "created_at",
-        {ascending:false}
-      );
-
+      .select("id,full_name,role,balance,created_at")
+      .order("created_at", { ascending:false });
 
   if(error){
 
     table.innerHTML =
-      `<tr><td colspan="5">
-        ${esc(error.message)}
-      </td></tr>`;
+      '<tr><td colspan="5">' +
+      esc(error.message) +
+      '</td></tr>';
 
     return;
   }
 
-
   const users = data || [];
 
-  document
-    .getElementById("usersCount")
+  document.getElementById("usersCount")
     .textContent = users.length;
-
 
   if(!users.length){
 
     table.innerHTML =
-      `<tr>
-        <td colspan="5" class="empty">
-          No users found
-        </td>
-      </tr>`;
+      '<tr><td colspan="5" class="empty">' +
+      'No users found' +
+      '</td></tr>';
 
     return;
   }
 
-
   table.innerHTML =
-    users.map(user => `
-
-      <tr>
-
-        <td>${esc(user.id)}</td>
-
-        <td>
-          ${esc(user.full_name || "Trader")}
-        </td>
-
-        <td>
-          <span class="badge">
-            ${esc(user.role)}
-          </span>
-        </td>
-
-        <td>
-          ${money(user.balance)}
-        </td>
-
-        <td>
-          ${new Date(user.created_at)
-            .toLocaleString()}
-        </td>
-
-      </tr>
-
-    `).join("");
-}
-
-
-/* =====================================================
-   DEPOSITS
-   ===================================================== */
-
-async function loadDeposits(){
-
-  const table =
-    document.getElementById("depositsTable");
-
-  table.innerHTML =
-    `<tr><td colspan="6">Loading...</td></tr>`;
-
-
-  const {data,error} =
-    await supabaseClient
-      .from("deposits")
-      .select("*")
-      .order(
-        "created_at",
-        {ascending:false}
-      );
-
-
-  if(error){
-
-    table.innerHTML =
-      `<tr><td colspan="6">
-        ${esc(error.message)}
-      </td></tr>`;
-
-    return;
-  }
-
-
-  const deposits = data || [];
-
-
-  const pending =
-    deposits.filter(
-      item => item.status === "pending"
-    ).length;
-
-
-  document
-    .getElementById("pendingDeposits")
-    .textContent = pending;
-
-
-  if(!deposits.length){
-
-    table.innerHTML =
-      `<tr>
-        <td colspan="6" class="empty">
-          No deposits
-        </td>
-      </tr>`;
-
-    return;
-  }
-
-
-  table.innerHTML =
-    deposits.map(item => {
-
-      let action = "-";
-
-
-      if(item.status === "pending"){
-
-        action = `
-
-          <button
-            class="action approve"
-            data-deposit-action="approve"
-            data-id="${esc(item.id)}"
-            type="button"
-          >
-            Approve
-          </button>
-
-          <button
-            class="action reject"
-            data-deposit-action="reject"
-            data-id="${esc(item.id)}"
-            type="button"
-          >
-            Reject
-          </button>
-
-        `;
-      }
-
+    users.map(function(user){
 
       return `
-
         <tr>
+          <td>${esc(user.id)}</td>
 
           <td>
-            ${money(item.amount)}
-          </td>
-
-          <td>
-            ${esc(item.user_id)}
+            ${esc(user.full_name || "Trader")}
           </td>
 
           <td>
-            ${esc(item.payment_method || "-")}
+            <span class="badge">
+              ${esc(user.role || "user")}
+            </span>
           </td>
 
           <td>
-            ${esc(item.reference || "-")}
-          </td>
-
-          <td class="${esc(item.status)}">
-            ${esc(item.status)}
+            ${money(user.balance)}
           </td>
 
           <td>
-            ${action}
+            ${user.created_at
+              ? new Date(user.created_at).toLocaleString()
+              : "-"
+            }
           </td>
-
         </tr>
-
       `;
 
     }).join("");
-}
-
-
-/* =====================================================
-   APPROVE DEPOSIT
-   ===================================================== */
-
-async function approveDeposit(id){
-
-  if(!confirm(
-    "Approve this deposit and add the amount to the user's balance?"
-  )){
-    return;
-  }
-
-
-  const {error} =
-    await supabaseClient.rpc(
-      "approve_deposit",
-      {
-        deposit_id:id
-      }
-    );
-
-
-  if(error){
-
-    alert(
-      "Deposit approval failed:\n" +
-      error.message
-    );
-
-    return;
-  }
-
-
-  alert("Deposit approved.");
-
-  await loadDeposits();
-  await loadUsers();
-}
-
-
-/* =====================================================
-   REJECT DEPOSIT
-   ===================================================== */
-
-async function rejectDeposit(id){
-
-  if(!confirm(
-    "Reject this deposit?"
-  )){
-    return;
-  }
-
-
-  const {error} =
-    await supabaseClient.rpc(
-      "reject_deposit",
-      {
-        deposit_id:id
-      }
-    );
-
-
-  if(error){
-
-    alert(
-      "Deposit rejection failed:\n" +
-      error.message
-    );
-
-    return;
-  }
-
-
-  alert("Deposit rejected.");
-
-  await loadDeposits();
 }
 
 
@@ -1272,94 +1519,108 @@ async function loadWithdrawals(){
     document.getElementById("withdrawalsTable");
 
   table.innerHTML =
-    `<tr><td colspan="6">Loading...</td></tr>`;
+    '<tr><td colspan="6">Loading...</td></tr>';
 
-
-  const {data,error} =
+  const { data, error } =
     await supabaseClient
       .from("withdrawals")
       .select("*")
-      .order(
-             .order("created_at",{ascending:false});
-
-  const table =
-    document.getElementById("withdrawalsTable");
+      .order("created_at", { ascending:false });
 
   if(error){
 
     table.innerHTML =
-      `<tr><td colspan="6">
-        ${esc(error.message)}
-      </td></tr>`;
+      '<tr><td colspan="6">' +
+      esc(error.message) +
+      '</td></tr>';
 
     return;
   }
 
-  const pending =
-    data.filter(x =>
-      x.status === "pending"
-    ).length;
+  const withdrawals = data || [];
 
-  document
-    .getElementById("pendingWithdrawals")
+  const pending =
+    withdrawals.filter(function(item){
+      return item.status === "pending";
+    }).length;
+
+  document.getElementById("pendingWithdrawals")
     .textContent = pending;
 
-  if(!data.length){
+  if(!withdrawals.length){
 
     table.innerHTML =
-      `<tr><td colspan="6" class="empty">
-        No withdrawals
-      </td></tr>`;
+      '<tr><td colspan="6" class="empty">' +
+      'No withdrawals' +
+      '</td></tr>';
 
     return;
   }
 
   table.innerHTML =
-    data.map(item => {
+    withdrawals.map(function(item){
 
       let action = "-";
 
       if(item.status === "pending"){
 
         action = `
-
           <button
             class="action approve"
-            onclick="approveWithdrawal('${item.id}')"
+            type="button"
+            data-withdraw-action="approve"
+            data-id="${esc(item.id)}"
           >
             Approve
           </button>
 
           <button
             class="action reject"
-            onclick="rejectWithdrawal('${item.id}')"
+            type="button"
+            data-withdraw-action="reject"
+            data-id="${esc(item.id)}"
           >
             Reject
           </button>
-
         `;
       }
 
       return `
-
         <tr>
 
-          <td>${money(item.amount)}</td>
-
-          <td>${esc(item.user_id)}</td>
-
-          <td>${esc(item.method || "-")}</td>
-
-          <td>${esc(item.account_details || "-")}</td>
-
-          <td class="${esc(item.status)}">
-            ${esc(item.status)}
+          <td>
+            ${money(item.amount)}
           </td>
 
-          <td>${action}</td>
+          <td>
+            ${esc(item.user_id)}
+          </td>
+
+          <td>
+            ${esc(
+              item.method ||
+              item.payment_method ||
+              "-"
+            )}
+          </td>
+
+          <td>
+            ${esc(
+              item.account_details ||
+              item.account ||
+              "-"
+            )}
+          </td>
+
+          <td class="${esc(item.status)}">
+            ${esc(item.status || "-")}
+          </td>
+
+          <td>
+            ${action}
+          </td>
 
         </tr>
-
       `;
 
     }).join("");
@@ -1378,15 +1639,21 @@ async function approveWithdrawal(id){
     return;
   }
 
-  const {error} =
-    await supabaseClient
-      .rpc("approve_withdrawal",{
+  const { error } =
+    await supabaseClient.rpc(
+      "approve_withdrawal",
+      {
         withdrawal_id:id
-      });
+      }
+    );
 
   if(error){
 
-    alert(error.message);
+    alert(
+      "Withdrawal approval failed:\n" +
+      error.message
+    );
+
     return;
   }
 
@@ -1409,15 +1676,21 @@ async function rejectWithdrawal(id){
     return;
   }
 
-  const {error} =
-    await supabaseClient
-      .rpc("reject_withdrawal",{
+  const { error } =
+    await supabaseClient.rpc(
+      "reject_withdrawal",
+      {
         withdrawal_id:id
-      });
+      }
+    );
 
   if(error){
 
-    alert(error.message);
+    alert(
+      "Withdrawal rejection failed:\n" +
+      error.message
+    );
+
     return;
   }
 
@@ -1433,65 +1706,98 @@ async function rejectWithdrawal(id){
 
 async function loadOrders(){
 
-  const {data,error} =
+  const table =
+    document.getElementById("ordersTable");
+
+  table.innerHTML =
+    '<tr><td colspan="6">Loading...</td></tr>';
+
+  const { data, error } =
     await supabaseClient
       .from("orders")
       .select("*")
-      .order("created_at",{ascending:false});
-
-  const table =
-    document.getElementById("ordersTable");
+      .order("created_at", { ascending:false });
 
   if(error){
 
     table.innerHTML =
-      `<tr><td colspan="6">
-        ${esc(error.message)}
-      </td></tr>`;
+      '<tr><td colspan="6">' +
+      esc(error.message) +
+      '</td></tr>';
 
     return;
   }
 
-  document
-    .getElementById("ordersCount")
-    .textContent = data.length;
+  const orders = data || [];
 
-  if(!data.length){
+  document.getElementById("ordersCount")
+    .textContent = orders.length;
+
+  if(!orders.length){
 
     table.innerHTML =
-      `<tr><td colspan="6" class="empty">
-        No orders
-      </td></tr>`;
+      '<tr><td colspan="6" class="empty">' +
+      'No orders' +
+      '</td></tr>';
 
     return;
   }
 
   table.innerHTML =
-    data.map(item => `
+    orders.map(function(item){
 
-      <tr>
+      return `
+        <tr>
 
-        <td>${esc(item.symbol || "-")}</td>
+          <td>
+            ${esc(
+              item.symbol ||
+              item.stock_symbol ||
+              "-"
+            )}
+          </td>
 
-        <td>${esc(item.side || "-")}</td>
+          <td>
+            ${esc(
+              item.side ||
+              "-"
+            )}
+          </td>
 
-        <td>${esc(item.quantity || 0)}</td>
+          <td>
+            ${esc(
+              item.quantity ||
+              item.qty ||
+              "-"
+            )}
+          </td>
 
-        <td>${money(item.price)}</td>
+          <td>
+            ${money(
+              item.price
+            )}
+          </td>
 
-        <td class="${esc(item.status)}">
-          ${esc(item.status || "-")}
-        </td>
+          <td class="${esc(item.status)}">
+            ${esc(
+              item.status ||
+              "-"
+            )}
+          </td>
 
-        <td>
-          ${item.created_at
-            ? new Date(item.created_at).toLocaleString()
-            : "-"}
-        </td>
+          <td>
+            ${item.created_at
+              ? new Date(
+                  item.created_at
+                ).toLocaleString()
+              : "-"
+            }
+          </td>
 
-      </tr>
+        </tr>
+      `;
 
-    `).join("");
+    }).join("");
 }
 
 
@@ -1501,55 +1807,81 @@ async function loadOrders(){
 
 async function loadInstruments(){
 
-  const {data,error} =
+  const table =
+    document.getElementById("instrumentsTable");
+
+  table.innerHTML =
+    '<tr><td colspan="6">Loading...</td></tr>';
+
+  const { data, error } =
     await supabaseClient
       .from("instruments")
       .select("*")
-      .order("symbol",{ascending:true});
-
-  const table =
-    document.getElementById("instrumentsTable");
+      .order("symbol", { ascending:true });
 
   if(error){
 
     table.innerHTML =
-      `<tr><td colspan="6">
-        ${esc(error.message)}
-      </td></tr>`;
+      '<tr><td colspan="6">' +
+      esc(error.message) +
+      '</td></tr>';
 
     return;
   }
 
-  if(!data.length){
+  const instruments = data || [];
+
+  if(!instruments.length){
 
     table.innerHTML =
-      `<tr><td colspan="6" class="empty">
-        No instruments
-      </td></tr>`;
+      '<tr><td colspan="6" class="empty">' +
+      'No instruments found' +
+      '</td></tr>';
 
     return;
   }
 
   table.innerHTML =
-    data.map(item => `
+    instruments.map(function(item){
 
-      <tr>
+      return `
+        <tr>
 
-        <td>${esc(item.symbol)}</td>
+          <td>
+            ${esc(item.symbol || "-")}
+          </td>
 
-        <td>${esc(item.name)}</td>
+          <td>
+            ${esc(item.name || "-")}
+          </td>
 
-        <td>${esc(item.type)}</td>
+          <td>
+            ${esc(item.type || "stock")}
+          </td>
 
-        <td>${money(item.price)}</td>
+          <td>
+            ${money(item.price)}
+          </td>
 
-        <td>${esc(item.change ?? 0)}</td>
+          <td>
+            ${esc(
+              item.change ??
+              item.change_percent ??
+              "0"
+            )}
+          </td>
 
-        <td>${item.active ? "Yes" : "No"}</td>
+          <td>
+            ${item.active === false
+              ? "No"
+              : "Yes"
+            }
+          </td>
 
-      </tr>
+        </tr>
+      `;
 
-    `).join("");
+    }).join("");
 }
 
 
@@ -1560,53 +1892,70 @@ async function loadInstruments(){
 async function addInstrument(){
 
   const symbol =
-    document.getElementById("instrumentSymbol")
-      .value.trim().toUpperCase();
+    document.getElementById(
+      "instrumentSymbol"
+    ).value.trim().toUpperCase();
 
   const name =
-    document.getElementById("instrumentName")
-      .value.trim();
+    document.getElementById(
+      "instrumentName"
+    ).value.trim();
 
   const type =
-    document.getElementById("instrumentType")
-      .value;
+    document.getElementById(
+      "instrumentType"
+    ).value;
 
   const price =
     Number(
-      document.getElementById("instrumentPrice")
-        .value
+      document.getElementById(
+        "instrumentPrice"
+      ).value
     );
 
   if(!symbol || !name || !price){
 
-    alert("Symbol, name and price required.");
+    alert(
+      "Symbol, name and price required."
+    );
 
     return;
   }
 
-  const {error} =
+  const { error } =
     await supabaseClient
       .from("instruments")
       .insert({
-        symbol,
-        name,
-        type,
-        price,
-        change:0,
+        symbol:symbol,
+        name:name,
+        type:type,
+        price:price,
         active:true
       });
 
   if(error){
 
-    alert(error.message);
+    alert(
+      "Instrument add failed:\n" +
+      error.message
+    );
+
     return;
   }
 
   alert("Instrument added.");
 
-  document.getElementById("instrumentSymbol").value = "";
-  document.getElementById("instrumentName").value = "";
-  document.getElementById("instrumentPrice").value = "";
+  document.getElementById(
+    "instrumentSymbol"
+  ).value = "";
+
+  document.getElementById(
+    "instrumentName"
+  ).value = "";
+
+  document.getElementById(
+    "instrumentPrice"
+  ).value = "";
 
   await loadInstruments();
 }
@@ -1625,44 +1974,252 @@ async function loadAll(){
     loadOrders(),
     loadInstruments()
   ]);
-
 }
 
 
 /* =====================================================
-   SESSION CHECK
+   BUTTON EVENTS
+   ===================================================== */
+
+document
+  .getElementById("loginButton")
+  .addEventListener(
+    "click",
+    adminLogin
+  );
+
+
+document
+  .getElementById("logoutButton")
+  .addEventListener(
+    "click",
+    adminLogout
+  );
+
+
+document
+  .getElementById("dashboardRefresh")
+  .addEventListener(
+    "click",
+    loadAll
+  );
+
+
+document
+  .getElementById("usersRefresh")
+  .addEventListener(
+    "click",
+    loadUsers
+  );
+
+
+document
+  .getElementById("depositsRefresh")
+  .addEventListener(
+    "click",
+    loadDeposits
+  );
+
+
+document
+  .getElementById("withdrawalsRefresh")
+  .addEventListener(
+    "click",
+    loadWithdrawals
+  );
+
+
+document
+  .getElementById("ordersRefresh")
+  .addEventListener(
+    "click",
+    loadOrders
+  );
+
+
+document
+  .getElementById("instrumentsRefresh")
+  .addEventListener(
+    "click",
+    loadInstruments
+  );
+
+
+document
+  .getElementById("addInstrumentButton")
+  .addEventListener(
+    "click",
+    addInstrument
+  );
+
+
+/* =====================================================
+   TAB BUTTONS
+   ===================================================== */
+
+document
+  .querySelectorAll(".tab")
+  .forEach(function(button){
+
+    button.addEventListener(
+      "click",
+      function(){
+
+        showPanel(
+          button.dataset.panel,
+          button
+        );
+
+      }
+    );
+
+  });
+
+
+/* =====================================================
+   DEPOSIT ACTIONS
+   ===================================================== */
+
+document.addEventListener(
+  "click",
+  function(event){
+
+    const button =
+      event.target.closest(
+        "[data-deposit-action]"
+      );
+
+    if(!button){
+      return;
+    }
+
+    const id =
+      button.dataset.id;
+
+    const action =
+      button.dataset.depositAction;
+
+    if(action === "approve"){
+      approveDeposit(id);
+    }
+
+    if(action === "reject"){
+      rejectDeposit(id);
+    }
+
+  }
+);
+
+
+/* =====================================================
+   WITHDRAWAL ACTIONS
+   ===================================================== */
+
+document.addEventListener(
+  "click",
+  function(event){
+
+    const button =
+      event.target.closest(
+        "[data-withdraw-action]"
+      );
+
+    if(!button){
+      return;
+    }
+
+    const id =
+      button.dataset.id;
+
+    const action =
+      button.dataset.withdrawAction;
+
+    if(action === "approve"){
+      approveWithdrawal(id);
+    }
+
+    if(action === "reject"){
+      rejectWithdrawal(id);
+    }
+
+  }
+);
+
+
+/* =====================================================
+   ENTER KEY LOGIN
+   ===================================================== */
+
+document
+  .getElementById("adminPassword")
+  .addEventListener(
+    "keydown",
+    function(event){
+
+      if(event.key === "Enter"){
+        adminLogin();
+      }
+
+    }
+  );
+
+
+/* =====================================================
+   CHECK EXISTING SESSION
    ===================================================== */
 
 async function checkAdminSession(){
 
-  const {data} =
+  const {
+    data,
+    error
+  } =
     await supabaseClient.auth.getSession();
 
-  if(!data.session){
+  if(error){
     return;
   }
 
-  const user =
-    data.session.user;
+  const session =
+    data && data.session;
 
-  const {data:profile,error} =
+  if(!session || !session.user){
+    return;
+  }
+
+  const {
+    data:profile,
+    error:profileError
+  } =
     await supabaseClient
       .from("profiles")
-      .select("role")
-      .eq("id",user.id)
-      .single();
+      .select(
+        "id,full_name,role,balance"
+      )
+      .eq(
+        "id",
+        session.user.id
+      )
+      .maybeSingle();
 
-  if(error || !profile || profile.role !== "admin"){
-
+  if(profileError || !profile){
     await supabaseClient.auth.signOut();
+    return;
+  }
 
+  if(profile.role !== "admin"){
+    await supabaseClient.auth.signOut();
     return;
   }
 
   document
     .getElementById("adminEmailDisplay")
     .textContent =
-      user.email || "Admin";
+      profile.full_name
+        ? profile.full_name +
+          " • " +
+          session.user.email
+        : session.user.email;
 
   document
     .getElementById("loginScreen")
@@ -1675,10 +2232,10 @@ async function checkAdminSession(){
   await loadAll();
 }
 
+
 checkAdminSession();
 
 </script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 </body>
 </html>
