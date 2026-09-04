@@ -931,9 +931,6 @@ th{
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-
-<script>
-
 /* =====================================================
    SUPABASE CONFIG
 ===================================================== */
@@ -2270,7 +2267,1174 @@ document.getElementById("instrumentsRefresh")
   .addEventListener("click", loadInstruments);
 checkAdminSession();
 
-</script>
+<script>
+
+const SUPABASE_URL =
+  "https://ialhcvbmauefotujspag.supabase.co";
+
+const SUPABASE_ANON_KEY =
+  "sb_publishable_NT_JybG43uFNvw-Kh-IW9A_QD8g9lc9";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
+
+
+function esc(value){
+
+  if(value === null || value === undefined){
+    return "";
+  }
+
+  return String(value)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+
+function money(value){
+
+  return "₹" +
+    Number(value || 0).toLocaleString(
+      "en-IN",
+      {
+        minimumFractionDigits:2,
+        maximumFractionDigits:2
+      }
+    );
+}
+
+
+function message(text,type=""){
+
+  const el =
+    document.getElementById("loginMessage");
+
+  el.textContent = text;
+  el.className = type;
+}
+
+
+/* =========================
+   LOGIN
+========================= */
+
+async function adminLogin(){
+
+  const email =
+    document.getElementById("adminEmail")
+      .value.trim();
+
+  const password =
+    document.getElementById("adminPassword")
+      .value;
+
+  if(!email || !password){
+
+    message(
+      "Email and password required.",
+      "error"
+    );
+
+    return;
+  }
+
+  const button =
+    document.getElementById("loginButton");
+
+  button.disabled = true;
+  button.textContent = "Logging in...";
+
+  try{
+
+    const {data,error} =
+      await supabaseClient.auth
+        .signInWithPassword({
+          email,
+          password
+        });
+
+    if(error){
+
+      message(error.message,"error");
+      return;
+    }
+
+    if(!data.user){
+
+      message(
+        "Login failed.",
+        "error"
+      );
+
+      return;
+    }
+
+    await verifyAdmin(data.user);
+
+  }
+  catch(error){
+
+    message(
+      error.message,
+      "error"
+    );
+
+  }
+  finally{
+
+    button.disabled = false;
+    button.textContent = "Admin Login";
+
+  }
+}
+
+
+/* =========================
+   VERIFY ADMIN
+========================= */
+
+async function verifyAdmin(user){
+
+  const {data:profile,error} =
+    await supabaseClient
+      .from("profiles")
+      .select(
+        "id,full_name,role,balance"
+      )
+      .eq("id",user.id)
+      .maybeSingle();
+
+  if(error){
+
+    await supabaseClient.auth.signOut();
+
+    message(
+      "Profile error: " + error.message,
+      "error"
+    );
+
+    return;
+  }
+
+  if(!profile){
+
+    await supabaseClient.auth.signOut();
+
+    message(
+      "Admin profile not found.",
+      "error"
+    );
+
+    return;
+  }
+
+  if(
+    String(profile.role).toLowerCase() !==
+    "admin"
+  ){
+
+    await supabaseClient.auth.signOut();
+
+    message(
+      "Access denied. Admin account required.",
+      "error"
+    );
+
+    return;
+  }
+
+  document.getElementById(
+    "adminEmailDisplay"
+  ).textContent =
+    profile.full_name
+      ? profile.full_name + " • " + user.email
+      : user.email;
+
+  document.getElementById(
+    "dashboardAdminEmail"
+  ).textContent =
+    user.email;
+
+  document.getElementById(
+    "loginScreen"
+  ).style.display = "none";
+
+  document.getElementById(
+    "adminApp"
+  ).style.display = "block";
+
+  await loadAll();
+}
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+async function adminLogout(){
+
+  await supabaseClient.auth.signOut();
+
+  document.getElementById(
+    "adminApp"
+  ).style.display = "none";
+
+  document.getElementById(
+    "loginScreen"
+  ).style.display = "flex";
+
+  document.getElementById(
+    "adminPassword"
+  ).value = "";
+
+}
+
+
+/* =========================
+   USERS
+========================= */
+
+async function loadUsers(){
+
+  const table =
+    document.getElementById("usersTable");
+
+  table.innerHTML =
+    '<tr><td colspan="5">Loading...</td></tr>';
+
+  const {data,error} =
+    await supabaseClient
+      .from("profiles")
+      .select(
+        "id,full_name,role,balance,created_at"
+      )
+      .order(
+        "created_at",
+        {ascending:false}
+      );
+
+  if(error){
+
+    table.innerHTML =
+      '<tr><td colspan="5">' +
+      esc(error.message) +
+      '</td></tr>';
+
+    return;
+  }
+
+  const users = data || [];
+
+  document.getElementById(
+    "usersCount"
+  ).textContent = users.length;
+
+  if(!users.length){
+
+    table.innerHTML =
+      '<tr><td colspan="5" class="empty">' +
+      'No users found' +
+      '</td></tr>';
+
+    return;
+  }
+
+  table.innerHTML =
+    users.map(function(user){
+
+      return `
+        <tr>
+          <td>${esc(user.id)}</td>
+          <td>${esc(user.full_name || "Trader")}</td>
+          <td>
+            <span class="badge">
+              ${esc(user.role || "user")}
+            </span>
+          </td>
+          <td>${money(user.balance)}</td>
+          <td>
+            ${
+              user.created_at
+                ? new Date(
+                    user.created_at
+                  ).toLocaleString()
+                : "-"
+            }
+          </td>
+        </tr>
+      `;
+
+    }).join("");
+}
+
+
+/* =========================
+   DEPOSITS
+========================= */
+
+async function loadDeposits(){
+
+  const table =
+    document.getElementById("depositsTable");
+
+  table.innerHTML =
+    '<tr><td colspan="6">Loading...</td></tr>';
+
+  const {data,error} =
+    await supabaseClient
+      .from("deposits")
+      .select("*")
+      .order(
+        "created_at",
+        {ascending:false}
+      );
+
+  if(error){
+
+    table.innerHTML =
+      '<tr><td colspan="6">' +
+      esc(error.message) +
+      '</td></tr>';
+
+    return;
+  }
+
+  const deposits = data || [];
+
+  const pending =
+    deposits.filter(function(item){
+      return item.status === "pending";
+    }).length;
+
+  document.getElementById(
+    "pendingDeposits"
+  ).textContent = pending;
+
+  if(!deposits.length){
+
+    table.innerHTML =
+      '<tr><td colspan="6" class="empty">' +
+      'No deposits' +
+      '</td></tr>';
+
+    return;
+  }
+
+  table.innerHTML =
+    deposits.map(function(item){
+
+      let action = "-";
+
+      if(item.status === "pending"){
+
+        action = `
+          <button
+            class="action approve"
+            data-deposit-action="approve"
+            data-id="${esc(item.id)}"
+            type="button"
+          >
+            Approve
+          </button>
+
+          <button
+            class="action reject"
+            data-deposit-action="reject"
+            data-id="${esc(item.id)}"
+            type="button"
+          >
+            Reject
+          </button>
+        `;
+      }
+
+      return `
+        <tr>
+          <td>${money(item.amount)}</td>
+          <td>${esc(item.user_id)}</td>
+          <td>
+            ${esc(
+              item.payment_method ||
+              item.method ||
+              "-"
+            )}
+          </td>
+          <td>
+            ${esc(item.reference || "-")}
+          </td>
+          <td class="${esc(item.status)}">
+            ${esc(item.status || "-")}
+          </td>
+          <td>${action}</td>
+        </tr>
+      `;
+
+    }).join("");
+}
+
+
+/* =========================
+   WITHDRAWALS
+========================= */
+
+async function loadWithdrawals(){
+
+  const table =
+    document.getElementById(
+      "withdrawalsTable"
+    );
+
+  table.innerHTML =
+    '<tr><td colspan="6">Loading...</td></tr>';
+
+  const {data,error} =
+    await supabaseClient
+      .from("withdrawals")
+      .select("*")
+      .order(
+        "created_at",
+        {ascending:false}
+      );
+
+  if(error){
+
+    table.innerHTML =
+      '<tr><td colspan="6">' +
+      esc(error.message) +
+      '</td></tr>';
+
+    return;
+  }
+
+  const withdrawals = data || [];
+
+  const pending =
+    withdrawals.filter(function(item){
+      return item.status === "pending";
+    }).length;
+
+  document.getElementById(
+    "pendingWithdrawals"
+  ).textContent = pending;
+
+  if(!withdrawals.length){
+
+    table.innerHTML =
+      '<tr><td colspan="6" class="empty">' +
+      'No withdrawals' +
+      '</td></tr>';
+
+    return;
+  }
+
+  table.innerHTML =
+    withdrawals.map(function(item){
+
+      let action = "-";
+
+      if(item.status === "pending"){
+
+        action = `
+          <button
+            class="action approve"
+            data-withdraw-action="approve"
+            data-id="${esc(item.id)}"
+            type="button"
+          >
+            Approve
+          </button>
+
+          <button
+            class="action reject"
+            data-withdraw-action="reject"
+            data-id="${esc(item.id)}"
+            type="button"
+          >
+            Reject
+          </button>
+        `;
+      }
+
+      return `
+        <tr>
+          <td>${money(item.amount)}</td>
+          <td>${esc(item.user_id)}</td>
+          <td>
+            ${esc(
+              item.method ||
+              item.payment_method ||
+              "-"
+            )}
+          </td>
+          <td>
+            ${esc(
+              item.account_details ||
+              item.account ||
+              "-"
+            )}
+          </td>
+          <td class="${esc(item.status)}">
+            ${esc(item.status || "-")}
+          </td>
+          <td>${action}</td>
+        </tr>
+      `;
+
+    }).join("");
+}
+
+
+/* =========================
+   ORDERS
+========================= */
+
+async function loadOrders(){
+
+  const table =
+    document.getElementById("ordersTable");
+
+  table.innerHTML =
+    '<tr><td colspan="6">Loading...</td></tr>';
+
+  const {data,error} =
+    await supabaseClient
+      .from("orders")
+      .select("*")
+      .order(
+        "created_at",
+        {ascending:false}
+      );
+
+  if(error){
+
+    table.innerHTML =
+      '<tr><td colspan="6">' +
+      esc(error.message) +
+      '</td></tr>';
+
+    return;
+  }
+
+  const orders = data || [];
+
+  document.getElementById(
+    "ordersCount"
+  ).textContent = orders.length;
+
+  if(!orders.length){
+
+    table.innerHTML =
+      '<tr><td colspan="6" class="empty">' +
+      'No orders' +
+      '</td></tr>';
+
+    return;
+  }
+
+  table.innerHTML =
+    orders.map(function(item){
+
+      return `
+        <tr>
+          <td>
+            ${esc(
+              item.symbol ||
+              item.stock_symbol ||
+              "-"
+            )}
+          </td>
+
+          <td>${esc(item.side || "-")}</td>
+
+          <td>
+            ${esc(
+              item.quantity ||
+              item.qty ||
+              "-"
+            )}
+          </td>
+
+          <td>${money(item.price)}</td>
+
+          <td class="${esc(item.status)}">
+            ${esc(item.status || "-")}
+          </td>
+
+          <td>
+            ${
+              item.created_at
+                ? new Date(
+                    item.created_at
+                  ).toLocaleString()
+                : "-"
+            }
+          </td>
+        </tr>
+      `;
+
+    }).join("");
+}
+
+
+/* =========================
+   INSTRUMENTS
+========================= */
+
+async function loadInstruments(){
+
+  const table =
+    document.getElementById(
+      "instrumentsTable"
+    );
+
+  table.innerHTML =
+    '<tr><td colspan="6">Loading...</td></tr>';
+
+  const {data,error} =
+    await supabaseClient
+      .from("instruments")
+      .select("*")
+      .order(
+        "symbol",
+        {ascending:true}
+      );
+
+  if(error){
+
+    table.innerHTML =
+      '<tr><td colspan="6">' +
+      esc(error.message) +
+      '</td></tr>';
+
+    return;
+  }
+
+  const instruments = data || [];
+
+  if(!instruments.length){
+
+    table.innerHTML =
+      '<tr><td colspan="6" class="empty">' +
+      'No instruments found' +
+      '</td></tr>';
+
+    return;
+  }
+
+  table.innerHTML =
+    instruments.map(function(item){
+
+      return `
+        <tr>
+          <td>${esc(item.symbol || "-")}</td>
+          <td>${esc(item.name || "-")}</td>
+          <td>${esc(item.type || "stock")}</td>
+          <td>${money(item.price)}</td>
+          <td>
+            ${esc(
+              item.change ??
+              item.change_percent ??
+              "0"
+            )}
+          </td>
+          <td>
+            ${item.active === false ? "No" : "Yes"}
+          </td>
+        </tr>
+      `;
+
+    }).join("");
+}
+
+
+/* =========================
+   ADD INSTRUMENT
+========================= */
+
+async function addInstrument(){
+
+  const symbol =
+    document.getElementById(
+      "instrumentSymbol"
+    ).value.trim().toUpperCase();
+
+  const name =
+    document.getElementById(
+      "instrumentName"
+    ).value.trim();
+
+  const type =
+    document.getElementById(
+      "instrumentType"
+    ).value;
+
+  const price =
+    Number(
+      document.getElementById(
+        "instrumentPrice"
+      ).value
+    );
+
+  if(!symbol || !name || !price){
+
+    alert(
+      "Symbol, name and price required."
+    );
+
+    return;
+  }
+
+  const {error} =
+    await supabaseClient
+      .from("instruments")
+      .insert({
+        symbol,
+        name,
+        type,
+        price,
+        active:true
+      });
+
+  if(error){
+
+    alert(
+      "Instrument add failed:\n" +
+      error.message
+    );
+
+    return;
+  }
+
+  alert("Instrument added.");
+
+  document.getElementById(
+    "instrumentSymbol"
+  ).value = "";
+
+  document.getElementById(
+    "instrumentName"
+  ).value = "";
+
+  document.getElementById(
+    "instrumentPrice"
+  ).value = "";
+
+  await loadInstruments();
+}
+
+
+/* =========================
+   DEPOSIT APPROVE/REJECT
+========================= */
+
+async function approveDeposit(id){
+
+  if(!confirm(
+    "Approve this deposit?"
+  )){
+    return;
+  }
+
+  const {error} =
+    await supabaseClient.rpc(
+      "approve_deposit",
+      {
+        deposit_id:id
+      }
+    );
+
+  if(error){
+
+    alert(
+      "Deposit approval failed:\n" +
+      error.message
+    );
+
+    return;
+  }
+
+  alert("Deposit approved.");
+
+  await loadDeposits();
+  await loadUsers();
+}
+
+
+async function rejectDeposit(id){
+
+  if(!confirm(
+    "Reject this deposit?"
+  )){
+    return;
+  }
+
+  const {error} =
+    await supabaseClient.rpc(
+      "reject_deposit",
+      {
+        deposit_id:id
+      }
+    );
+
+  if(error){
+
+    alert(
+      "Deposit rejection failed:\n" +
+      error.message
+    );
+
+    return;
+  }
+
+  alert("Deposit rejected.");
+
+  await loadDeposits();
+}
+
+
+/* =========================
+   WITHDRAW APPROVE/REJECT
+========================= */
+
+async function approveWithdrawal(id){
+
+  if(!confirm(
+    "Approve this withdrawal?"
+  )){
+    return;
+  }
+
+  const {error} =
+    await supabaseClient.rpc(
+      "approve_withdrawal",
+      {
+        withdrawal_id:id
+      }
+    );
+
+  if(error){
+
+    alert(
+      "Withdrawal approval failed:\n" +
+      error.message
+    );
+
+    return;
+  }
+
+  alert("Withdrawal approved.");
+
+  await loadWithdrawals();
+  await loadUsers();
+}
+
+
+async function rejectWithdrawal(id){
+
+  if(!confirm(
+    "Reject this withdrawal?"
+  )){
+    return;
+  }
+
+  const {error} =
+    await supabaseClient.rpc(
+      "reject_withdrawal",
+      {
+        withdrawal_id:id
+      }
+    );
+
+  if(error){
+
+    alert(
+      "Withdrawal rejection failed:\n" +
+      error.message
+    );
+
+    return;
+  }
+
+  alert("Withdrawal rejected.");
+
+  await loadWithdrawals();
+}
+
+
+/* =========================
+   LOAD ALL
+========================= */
+
+async function loadAll(){
+
+  await Promise.all([
+    loadUsers(),
+    loadDeposits(),
+    loadWithdrawals(),
+    loadOrders(),
+    loadInstruments()
+  ]);
+
+}
+
+
+/* =========================
+   PANEL SWITCH
+========================= */
+
+async function showPanel(id,button){
+
+  document
+    .querySelectorAll(".panel")
+    .forEach(function(panel){
+      panel.classList.remove("active");
+    });
+
+  document
+    .querySelectorAll(".tab")
+    .forEach(function(tab){
+      tab.classList.remove("active");
+    });
+
+  const panel =
+    document.getElementById(id);
+
+  if(panel){
+    panel.classList.add("active");
+  }
+
+  if(button){
+    button.classList.add("active");
+  }
+
+  if(id === "users"){
+    await loadUsers();
+  }
+
+  if(id === "deposits"){
+    await loadDeposits();
+  }
+
+  if(id === "withdrawals"){
+    await loadWithdrawals();
+  }
+
+  if(id === "orders"){
+    await loadOrders();
+  }
+
+  if(id === "instruments"){
+    await loadInstruments();
+  }
+
+}
+
+
+/* =========================
+   EVENTS
+========================= */
+
+document
+  .getElementById("loginButton")
+  .addEventListener(
+    "click",
+    adminLogin
+  );
+
+document
+  .getElementById("logoutButton")
+  .addEventListener(
+    "click",
+    adminLogout
+  );
+
+document
+  .getElementById("dashboardRefresh")
+  .addEventListener(
+    "click",
+    loadAll
+  );
+
+document
+  .getElementById("usersRefresh")
+  .addEventListener(
+    "click",
+    loadUsers
+  );
+
+document
+  .getElementById("depositsRefresh")
+  .addEventListener(
+    "click",
+    loadDeposits
+  );
+
+document
+  .getElementById("withdrawalsRefresh")
+  .addEventListener(
+    "click",
+    loadWithdrawals
+  );
+
+document
+  .getElementById("ordersRefresh")
+  .addEventListener(
+    "click",
+    loadOrders
+  );
+
+document
+  .getElementById("instrumentsRefresh")
+  .addEventListener(
+    "click",
+    loadInstruments
+  );
+
+document
+  .getElementById("addInstrumentButton")
+  .addEventListener(
+    "click",
+    addInstrument
+  );
+
+
+/* TABS */
+
+document
+  .querySelectorAll(".tab")
+  .forEach(function(button){
+
+    button.addEventListener(
+      "click",
+      function(){
+
+        showPanel(
+          button.dataset.panel,
+          button
+        );
+
+      }
+    );
+
+  });
+
+
+/* DEPOSIT ACTIONS */
+
+document.addEventListener(
+  "click",
+  function(event){
+
+    const button =
+      event.target.closest(
+        "[data-deposit-action]"
+      );
+
+    if(!button){
+      return;
+    }
+
+    const id =
+      button.dataset.id;
+
+    const action =
+      button.dataset.depositAction;
+
+    if(action === "approve"){
+      approveDeposit(id);
+    }
+
+    if(action === "reject"){
+      rejectDeposit(id);
+    }
+
+  }
+);
+
+
+/* WITHDRAWAL ACTIONS */
+
+document.addEventListener(
+  "click",
+  function(event){
+
+    const button =
+      event.target.closest(
+        "[data-withdraw-action]"
+      );
+
+    if(!button){
+      return;
+    }
+
+    const id =
+      button.dataset.id;
+
+    const action =
+      button.dataset.withdrawAction;
+
+    if(action === "approve"){
+      approveWithdrawal(id);
+    }
+
+    if(action === "reject"){
+      rejectWithdrawal(id);
+    }
+
+  }
+);
+
+
+/* ENTER KEY */
+
+document
+  .getElementById("adminPassword")
+  .addEventListener(
+    "keydown",
+    function(event){
+
+      if(event.key === "Enter"){
+        adminLogin();
+      }
+
+    }
+  );
+
+
+/* =========================
+   SESSION
+========================= */
+
+async function checkAdminSession(){
+
+  const {data,error} =
+    await supabaseClient.auth.getSession();
+
+  if(error){
+    return;
+  }
+
+  const session =
+    data && data.session;
+
+  if(!session || !session.user){
+    return;
+  }
+
+  await verifyAdmin(session.user);
+
+}
+
+
+checkAdminSession();
+
+  </script>
 
 </body>
 </html>
