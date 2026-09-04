@@ -2232,7 +2232,42 @@ async function checkAdminSession(){
   await loadAll();
 }
 
+document.getElementById("loginButton")
+  .addEventListener("click", adminLogin);
 
+document.getElementById("logoutButton")
+  .addEventListener("click", adminLogout);
+
+document.querySelectorAll(".tab").forEach(function(button){
+
+  button.addEventListener("click", function(){
+
+    showPanel(
+      button.dataset.panel,
+      button
+    );
+
+  });
+
+});
+
+document.getElementById("dashboardRefresh")
+  .addEventListener("click", loadAll);
+
+document.getElementById("usersRefresh")
+  .addEventListener("click", loadUsers);
+
+document.getElementById("depositsRefresh")
+  .addEventListener("click", loadDeposits);
+
+document.getElementById("withdrawalsRefresh")
+  .addEventListener("click", loadWithdrawals);
+
+document.getElementById("ordersRefresh")
+  .addEventListener("click", loadOrders);
+
+document.getElementById("instrumentsRefresh")
+  .addEventListener("click", loadInstruments);
 checkAdminSession();
 
 </script>
